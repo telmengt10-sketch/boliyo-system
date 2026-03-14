@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BoLiYo — Зогсооё | Дарамт Хавчлагын Хариуцлагын Систем</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Noto+Sans+Mono:wght@400;500;600&subset=cyrillic&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0b1929; --navy2: #0f2340; --navy3: #1a3a6e;
+  --blue: #1a56db; --blue2: #2563eb; --blue3: #3b82f6; --blue-lt: #dbeafe;
+  --teal: #0d9488; --teal-lt: #ccfbf1;
+  --red: #dc2626; --red-lt: #fee2e2;
+  --amber: #d97706; --amber-lt: #fef3c7;
+  --green: #16a34a; --green-lt: #dcfce7;
+  --purple: #7c3aed; --purple-lt: #ede9fe;
+  --g50: #f8fafc; --g100: #f1f5f9; --g200: #e2e8f0;
+  --g300: #cbd5e1; --g400: #94a3b8; --g500: #64748b;
+  --g600: #475569; --g700: #334155; --g800: #1e293b; --g900: #0f172a;
+  --white: #ffffff;
+  --font: 'Noto Sans', sans-serif;
+  --mono: 'Noto Sans Mono', monospace;
+  --radius: 12px; --radius-sm: 8px; --radius-lg: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--g50);color:var(--g800);min-height:100vh;}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(11,25,41,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:0;height:60px;}
+.nav-logo{font-size:20px;font-weight:800;color:var(--white);letter-spacing:-0.5px;margin-right:32px;cursor:pointer;flex-shrink:0;}
+.nav-logo span{color:#60a5fa;}
+.nav-tabs{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{padding:8px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--g400);cursor:pointer;white-space:nowrap;transition:all .2s;border:none;background:none;}
+.nav-tab:hover{color:var(--white);background:rgba(255,255,255,0.06);}
+.nav-tab.active{color:#60a5fa;background:rgba(26,86,219,0.2);}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:8px;}
+.nav-badge{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:#4ade80;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);padding:3px 8px;border-radius:20px;}
+
+/* ── PAGES ── */
+.page{display:none;min-height:100vh;padding-top:60px;}
+.page.active{display:block;}
+
+/* ── HERO SHARED ── */
+.hero{background:var(--navy);padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,#1a3a6e 0%,transparent 70%);}
+.hero-tag{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:#60a5fa;margin-bottom:16px;position:relative;}
+.hero-h1{font-size:clamp(36px,6vw,68px);font-weight:800;letter-spacing:-2px;color:var(--white);position:relative;margin-bottom:12px;}
+.hero-h1 em{color:#60a5fa;font-style:normal;}
+.hero-sub{font-size:16px;color:var(--g400);position:relative;max-width:560px;margin:0 auto 28px;}
+.hero-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:relative;}
+.hero-pill{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.12);color:var(--g300);}
+
+/* ── CONTAINER ── */
+.wrap{max-width:960px;margin:0 auto;padding:48px 24px;}
+.wrap-wide{max-width:1100px;margin:0 auto;padding:48px 24px;}
+.sec-label{font-family:var(--mono);font-size:11px;letter-spacing:3px;color:var(--blue3);text-transform:uppercase;margin-bottom:10px;}
+.sec-title{font-size:26px;font-weight:700;color:var(--navy2);letter-spacing:-0.5px;margin-bottom:8px;}
+.sec-desc{font-size:14px;color:var(--g500);line-height:1.7;margin-bottom:32px;}
+
+/* ── CARDS ── */
+.card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow);}
+.card:hover{box-shadow:var(--shadow-lg);}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .18s;}
+.btn-primary{background:var(--blue2);color:var(--white);}
+.btn-primary:hover{background:var(--blue);}
+.btn-secondary{background:var(--g100);color:var(--g700);border:1px solid var(--g200);}
+.btn-secondary:hover{background:var(--g200);}
+.btn-danger{background:var(--red-lt);color:var(--red);border:1px solid #fca5a5;}
+.btn-danger:hover{background:#fecaca;}
+.btn-ghost{background:transparent;color:var(--blue3);border:1px solid var(--blue-lt);}
+.btn-ghost:hover{background:var(--blue-lt);}
+.btn-lg{padding:14px 28px;font-size:15px;}
+.btn-sm{padding:7px 14px;font-size:12px;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* ── FORM ── */
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--g700);margin-bottom:6px;}
+.form-label span{color:var(--red);margin-left:2px;}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;color:var(--g800);background:var(--white);transition:border-color .15s,box-shadow .15s;outline:none;}
+.form-input:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(37,99,235,0.12);}
+.form-input::placeholder{color:var(--g300);}
+.form-hint{font-size:12px;color:var(--g400);margin-top:5px;}
+textarea.form-input{resize:vertical;min-height:90px;}
+select.form-input{cursor:pointer;}
+
+/* ── CHECK / RADIO ── */
+.check-group{display:flex;flex-direction:column;gap:10px;}
+.check-item{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.check-item input{width:16px;height:16px;accent-color:var(--blue2);cursor:pointer;}
+.check-item label{font-size:14px;color:var(--g700);cursor:pointer;}
+.checkbox-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.checkbox-card{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1.5px solid var(--g200);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;}
+.checkbox-card:hover{border-color:var(--blue3);background:var(--blue-lt);}
+.checkbox-card.selected{border-color:var(--blue2);background:#eff6ff;}
+.checkbox-card input{accent-color:var(--blue2);}
+.checkbox-card label{font-size:13px;font-weight:600;color:var(--g700);cursor:pointer;}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--mono);}
+.badge-blue{background:var(--blue-lt);color:var(--blue);}
+.badge-green{background:var(--green-lt);color:var(--green);}
+.badge-red{background:var(--red-lt);color:var(--red);}
+.badge-amber{background:var(--amber-lt);color:var(--amber);}
+.badge-purple{background:var(--purple-lt);color:var(--purple);}
+.badge-teal{background:var(--teal-lt);color:var(--teal);}
+.badge-gray{background:var(--g100);color:var(--g500);}
+
+/* ── CALLOUT ── */
+.callout{display:flex;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);font-size:13px;line-height:1.6;margin:14px 0;}
+.callout-icon{font-size:17px;flex-shrink:0;}
+.callout p{color:var(--g600);}
+.callout p strong{color:var(--g800);}
+.co-blue{background:#eff6ff;border-left:4px solid var(--blue3);}
+.co-red{background:var(--red-lt);border-left:4px solid var(--red);}
+.co-green{background:var(--green-lt);border-left:4px solid var(--green);}
+.co-amber{background:var(--amber-lt);border-left:4px solid var(--amber);}
+.co-purple{background:var(--purple-lt);border-left:4px solid var(--purple);}
+.co-teal{background:var(--teal-lt);border-left:4px solid var(--teal);}
+
+/* ── CHAIN LOG ── */
+.chain-box{background:#0b1929;border-radius:var(--radius-sm);padding:16px 18px;margin:14px 0;border:1px solid #1a3a6e;}
+.chain-box-label{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:#3b5fa0;margin-bottom:10px;text-transform:uppercase;}
+.chain-line{font-family:var(--mono);font-size:11px;line-height:2;padding:2px 0;}
+.chain-key{color:#60a5fa;}
+.chain-val{color:#a5f3fc;}
+.chain-ts{color:#334155;}
+.chain-sep{color:#1e3a5f;}
+
+/* ─────────────────────────────── PAGE 1: HOW IT WORKS ─── */
+.how-step{display:grid;grid-template-columns:56px 1fr;gap:0 20px;position:relative;margin-bottom:0;}
+.how-step-line{position:absolute;left:27px;top:68px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue3),var(--g200));z-index:0;}
+.how-step:last-child .how-step-line{display:none;}
+.how-num-col{display:flex;flex-direction:column;align-items:center;padding-top:14px;}
+.how-num{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:var(--mono);z-index:1;position:relative;border:2px solid;flex-shrink:0;}
+.how-num.victim{background:#fff1f2;border-color:#fca5a5;color:#be123c;}
+.how-num.school{background:var(--amber-lt);border-color:#fcd34d;color:#92400e;}
+.how-num.system{background:var(--blue-lt);border-color:#93c5fd;color:#1e40af;}
+.how-num.police{background:var(--blue-lt);border-color:#93c5fd;color:#1e40af;}
+.how-num.ombudsman{background:var(--purple-lt);border-color:#c4b5fd;color:#5b21b6;}
+.how-num.resolve{background:var(--green-lt);border-color:#86efac;color:#166534;}
+.how-content{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-lg);padding:22px 26px;margin-bottom:22px;transition:box-shadow .2s;}
+.how-content:hover{box-shadow:var(--shadow);}
+.how-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.how-title{font-size:16px;font-weight:700;color:var(--navy2);}
+.how-actor{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;white-space:nowrap;}
+.ha-victim{background:#fff1f2;color:#be123c;}
+.ha-school{background:var(--amber-lt);color:#92400e;}
+.ha-system{background:var(--g100);color:var(--g500);}
+.ha-police{background:var(--blue-lt);color:#1e40af;}
+.ha-multi{background:#eff6ff;color:#1e40af;}
+.ha-ombudsman{background:var(--purple-lt);color:#5b21b6;}
+.ha-resolve{background:var(--green-lt);color:#166534;}
+.how-desc{font-size:13px;color:var(--g600);line-height:1.7;margin-bottom:12px;}
+.how-actions{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.how-action{display:flex;gap:10px;font-size:13px;color:var(--g600);line-height:1.5;}
+.ha-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px;}
+.ha-check{background:var(--green-lt);}
+.ha-info{background:var(--blue-lt);}
+.ha-warn{background:var(--amber-lt);}
+.ha-lock{background:var(--purple-lt);}
+.ha-flag{background:var(--red-lt);}
+
+/* ─────────────────────────────── PAGE 2: LOGIN ─── */
+.login-wrap{max-width:480px;margin:0 auto;padding:60px 24px;}
+.login-step{display:none;}
+.login-step.active{display:block;}
+.dan-input-wrap{position:relative;}
+.dan-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:13px;color:var(--g400);pointer-events:none;}
+.dan-real-input{padding-left:70px !important;}
+.login-progress{display:flex;gap:8px;margin-bottom:32px;}
+.lp-dot{flex:1;height:3px;border-radius:2px;background:var(--g200);transition:background .3s;}
+.lp-dot.done{background:var(--green);}
+.lp-dot.active{background:var(--blue3);}
+.school-confirm-card{border:2px solid var(--blue2);border-radius:var(--radius-lg);padding:20px;background:var(--blue-lt);margin:20px 0;}
+.school-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid rgba(37,99,235,0.15);}
+.school-row:last-child{border-bottom:none;}
+.school-row-label{color:var(--g500);font-weight:600;}
+.school-row-val{color:var(--navy2);font-weight:700;}
+.loading-spin{width:40px;height:40px;border:3px solid var(--g200);border-top-color:var(--blue3);border-radius:50%;animation:spin .8s linear infinite;margin:20px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-lt);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;}
+
+/* ─────────────────────────────── PAGE 3: REPORT ─── */
+.report-stepper{display:flex;gap:0;margin-bottom:36px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--g200);}
+.rs-step{flex:1;padding:12px 8px;text-align:center;font-size:12px;font-weight:600;color:var(--g400);background:var(--white);border-right:1px solid var(--g200);cursor:pointer;transition:all .2s;}
+.rs-step:last-child{border-right:none;}
+.rs-step.done{background:var(--green-lt);color:var(--green);}
+.rs-step.active{background:var(--blue2);color:var(--white);}
+.rs-step-num{display:block;font-family:var(--mono);font-size:16px;font-weight:700;margin-bottom:3px;}
+.report-panel{display:none;}
+.report-panel.active{display:block;}
+.section-divider{border:none;border-top:1px solid var(--g200);margin:24px 0;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.field-row{grid-template-columns:1fr;}}
+.evidence-drop{border:2px dashed var(--g300);border-radius:var(--radius-sm);padding:32px;text-align:center;cursor:pointer;transition:all .2s;}
+.evidence-drop:hover,.evidence-drop.dragging{border-color:var(--blue3);background:var(--blue-lt);}
+.evidence-drop .ed-icon{font-size:36px;margin-bottom:10px;}
+.evidence-drop .ed-text{font-size:14px;font-weight:600;color:var(--g600);margin-bottom:4px;}
+.evidence-drop .ed-sub{font-size:12px;color:var(--g400);}
+.evidence-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--g200);border-radius:var(--radius-sm);margin-top:10px;background:var(--white);}
+.evidence-item .ei-icon{font-size:22px;}
+.evidence-item .ei-name{font-size:13px;font-weight:600;color:var(--g800);flex:1;}
+.evidence-item .ei-hash{font-family:var(--mono);font-size:10px;color:var(--g400);}
+.evidence-item .ei-badge{background:var(--green-lt);color:var(--green);font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;font-family:var(--mono);}
+.safety-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:8px;}
+.safety-btn{padding:16px 12px;border-radius:var(--radius-sm);border:2px solid var(--g200);cursor:pointer;text-align:center;transition:all .2s;background:var(--white);}
+.safety-btn:hover{border-color:var(--blue3);}
+.safety-btn.sel-yes{border-color:var(--green);background:var(--green-lt);}
+.safety-btn.sel-no{border-color:var(--red);background:var(--red-lt);}
+.safety-btn.sel-unsure{border-color:var(--amber);background:var(--amber-lt);}
+.safety-btn .sb-icon{font-size:24px;margin-bottom:6px;}
+.safety-btn .sb-label{font-size:13px;font-weight:700;color:var(--g700);}
+.outcome-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.outcome-card{padding:14px;border:1.5px solid var(--g200);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;}
+.outcome-card:hover{border-color:var(--blue3);}
+.outcome-card.selected{border-color:var(--blue2);background:#eff6ff;}
+.outcome-card .oc-icon{font-size:20px;margin-bottom:6px;}
+.outcome-card .oc-label{font-size:13px;font-weight:600;color:var(--g700);}
+
+/* ─────────────────────────────── PAGE 4: TRACKER ─── */
+.tracker-header{background:var(--navy);padding:48px 24px 0;}
+.tracker-header-inner{max-width:960px;margin:0 auto;}
+.case-id-big{font-family:var(--mono);font-size:24px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.case-status-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;font-family:var(--mono);}
+.csb-active{background:rgba(26,86,219,0.3);border:1px solid rgba(26,86,219,0.6);color:#93c5fd;}
+.csb-stall{background:rgba(220,38,38,0.2);border:1px solid rgba(220,38,38,0.5);color:#fca5a5;}
+.csb-resolved{background:rgba(22,163,74,0.2);border:1px solid rgba(22,163,74,0.5);color:#86efac;}
+.tracker-tabs{display:flex;gap:2px;margin-top:28px;}
+.tracker-tab{padding:10px 18px;font-size:13px;font-weight:600;color:var(--g400);cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;}
+.tracker-tab:hover{color:var(--white);}
+.tracker-tab.active{color:#60a5fa;border-bottom-color:#60a5fa;}
+.tracker-body{padding:40px 24px;}
+.tracker-body-inner{max-width:960px;margin:0 auto;}
+.tracker-panel{display:none;}
+.tracker-panel.active{display:block;}
+
+/* timeline */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:grid;grid-template-columns:44px 1fr;gap:0 18px;position:relative;}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:21px;top:44px;bottom:0;width:2px;background:var(--g200);z-index:0;}
+.tl-dot-col{display:flex;flex-direction:column;align-items:center;padding-top:12px;}
+.tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;z-index:1;border:2px solid;}
+.td-done{background:var(--green-lt);border-color:var(--green);}
+.td-active{background:var(--blue-lt);border-color:var(--blue3);box-shadow:0 0 0 4px rgba(59,130,246,0.15);}
+.td-stall{background:var(--red-lt);border-color:var(--red);}
+.td-warn{background:var(--amber-lt);border-color:var(--amber);}
+.td-chain{background:#0b1929;border-color:#1e40af;}
+.tl-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-sm);padding:16px 18px;margin-bottom:16px;}
+.tl-card:hover{box-shadow:var(--shadow);}
+.tl-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.tl-title{font-size:14px;font-weight:700;color:var(--g800);}
+.tl-time{font-family:var(--mono);font-size:11px;color:var(--g400);}
+.tl-desc{font-size:13px;color:var(--g600);line-height:1.6;}
+
+/* track cards */
+.tracks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px;}
+.track-card{border-radius:var(--radius-sm);padding:20px;border:1px solid;}
+.track-school{background:var(--amber-lt);border-color:#fcd34d;}
+.track-police{background:#eff6ff;border-color:#93c5fd;}
+.track-social{background:var(--teal-lt);border-color:#99f6e4;}
+.track-title{font-size:14px;font-weight:700;margin-bottom:12px;}
+.track-item{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:8px;color:var(--g600);}
+.track-item .ti-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ti-done{background:var(--green);}
+.ti-pending{background:var(--amber);}
+.ti-fail{background:var(--red);}
+
+/* ─────────────────────────────── PAGE 5: STATS ─── */
+.stats-hero{background:var(--navy);padding:60px 24px 40px;}
+.stats-hero-inner{max-width:1100px;margin:0 auto;}
+.national-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:40px;}
+.nat-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);padding:18px;}
+.nat-icon{font-size:22px;margin-bottom:8px;}
+.nat-val{font-family:var(--mono);font-size:28px;font-weight:600;color:var(--white);margin-bottom:4px;}
+.nat-label{font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;}
+.nat-note{font-size:10px;color:var(--g500);margin-top:4px;font-style:italic;}
+.nat-card.highlight{background:rgba(26,86,219,0.25);border-color:rgba(26,86,219,0.5);}
+.nat-card.highlight .nat-val{color:#60a5fa;}
+
+/* school table */
+.school-table-wrap{overflow-x:auto;}
+.school-table{width:100%;border-collapse:collapse;}
+.school-table th{padding:12px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g400);background:var(--g50);border-bottom:2px solid var(--g200);text-align:left;white-space:nowrap;}
+.school-table td{padding:14px;font-size:13px;color:var(--g700);border-bottom:1px solid var(--g200);vertical-align:middle;}
+.school-table tr:hover td{background:var(--g50);}
+.school-name{font-weight:700;color:var(--g800);}
+.school-district{font-size:11px;color:var(--g400);margin-top:2px;}
+.rank-num{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--g300);}
+.rank-1{color:#ef4444;}
+.rank-2{color:#f97316;}
+.rank-3{color:#f59e0b;}
+.bar-wrap{display:flex;align-items:center;gap:8px;}
+.bar{height:8px;border-radius:4px;min-width:4px;transition:width .3s;}
+.bar-red{background:var(--red);}
+.bar-amber{background:var(--amber);}
+.bar-green{background:var(--green);}
+.bar-val{font-family:var(--mono);font-size:12px;font-weight:600;white-space:nowrap;}
+.perf-pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;font-family:var(--mono);}
+.perf-f{background:var(--red-lt);color:var(--red);}
+.perf-d{background:#fff3e0;color:#e65100;}
+.perf-c{background:var(--amber-lt);color:var(--amber);}
+.perf-b{background:#e8f5e9;color:#2e7d32;}
+.perf-a{background:var(--green-lt);color:var(--green);}
+.sort-btn{background:none;border:none;cursor:pointer;color:var(--g400);font-size:12px;padding:0 4px;}
+.sort-btn:hover{color:var(--blue3);}
+
+/* chart simple */
+.bar-chart-wrap{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.bc-row{display:flex;align-items:center;gap:12px;}
+.bc-label{font-size:12px;font-weight:600;color:var(--g600);width:180px;flex-shrink:0;text-align:right;}
+.bc-bar-track{flex:1;height:28px;background:var(--g100);border-radius:4px;overflow:hidden;position:relative;}
+.bc-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:10px;}
+.bc-fill-label{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--white);}
+.bc-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--g600);width:48px;text-align:right;flex-shrink:0;}
+
+/* police table */
+.police-table-wrap{overflow-x:auto;margin-top:16px;}
+.police-table{width:100%;border-collapse:collapse;}
+.police-table th{padding:10px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--g400);background:var(--g50);border-bottom:2px solid var(--g200);text-align:left;white-space:nowrap;}
+.police-table td{padding:12px;font-size:13px;color:var(--g700);border-bottom:1px solid var(--g200);}
+.police-table tr:hover td{background:var(--g50);}
+
+/* mini donut placeholder */
+.donut-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px;}
+.donut-card{background:var(--white);border:1px solid var(--g200);border-radius:var(--radius-sm);padding:16px;text-align:center;}
+.donut-val{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--navy2);margin:8px 0 4px;}
+.donut-label{font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;}
+.trend-up{color:var(--red);font-size:11px;}
+.trend-down{color:var(--green);font-size:11px;}
+
+/* responsive tweaks */
+@media(max-width:720px){
+  .how-step{grid-template-columns:48px 1fr;}
+  .report-stepper{gap:0;}
+  .rs-step{padding:10px 4px;font-size:10px;}
+  .safety-btns{grid-template-columns:1fr;}
+  .field-row{grid-template-columns:1fr;}
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ══ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('how')">BoLi<span>Yo</span></div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('how')" id="tab-how">Хэрхэн ажилладаг</button>
+      <button class="nav-tab" onclick="showPage('login')" id="tab-login">🔐 Нэвтрэх (ДАН)</button>
+      <button class="nav-tab" onclick="showPage('report')" id="tab-report">📋 Гомдол гаргах</button>
+      <button class="nav-tab" onclick="showPage('tracker')" id="tab-tracker">📡 Миний хэрэг</button>
+      <button class="nav-tab" onclick="showPage('stats')" id="tab-stats">📊 Статистик</button>
+      <button class="nav-tab" onclick="showPage('dev')" id="tab-dev">⚙️ Хөгжүүлэгчдэд</button>
+    </div>
+    <div class="nav-right">
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 1 — HOW IT WORKS
+══════════════════════════════════════════════════════ -->
+<div class="page active" id="page-how">
+  <div class="hero">
+    <div class="hero-tag">// СИСТЕМИЙН ТОЙМ</div>
+    <h1 class="hero-h1">BoLi<em>Yo</em></h1>
+    <p class="hero-sub">ДАН + ХУР + Блокчэйн технологиудыг ашиглан дээрэлхэх гэмт хэргийг мэдээлэх, бүртгэх ба шийдвэрлэх систем </p>
+    <div class="hero-pills">
+      <span class="hero-pill">🔐 ДАН-аар баталгаажуулдаг</span>
+      <span class="hero-pill">🏛 ХУР-тай холбогдсон</span>
+      <span class="hero-pill">⛓ Блокчэйн ашигладаг</span>
+      <span class="hero-pill">🧑‍🎓 Хохирогч төвтэй</span>
+      <span class="hero-pill">📊 Нийтэд мэдээлдэг</span>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div style="background:var(--navy2);padding:40px 24px;">
+    <div style="max-width:860px;margin:0 auto;">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:2px;color:#60a5fa;margin-bottom:14px;">// ЖИШЭЭ ХЭРЭГ</div>
+      <div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:12px;line-height:1.4;">
+        <span style="color:#93c5fd;">Энх охин</span> ###-р сургуулийн 9-р ангид сурдаг ба 3 долоо хоногийн турш дээрэлхэлтэд өртсөн байна. Уг гэмт хэргийг баталгаажуулах бичлэг ч бий. Эцэг эх нь сургуульд нь мэдэгдсэн ч юу ч болсонгүй. Харин одоо тэр <span style="color:#93c5fd;">BoLiYo</span> ашиглан хэргийг мэдээлж болно.
+      </div>
+      <div style="font-size:14px;color:var(--g400);line-height:1.7;">Уг систем дээрэлхэлттэй холбоотой хэрэг бүрийг хэрхэн яаж бүртгэхийг доод хэсгээс дэлгэрэнгүй хараарай.</div>
+    </div>
+  </div>
+
+  <!-- Roles row -->
+  <div style="background:var(--white);border-bottom:1px solid var(--g200);padding:24px;">
+    <div style="max-width:860px;margin:0 auto;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--g400);margin-bottom:14px;">// ОРОЛЦОГЧ ТАЛУУД</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="background:#fff1f2;border:1.5px solid #fecdd3;color:#be123c;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">🧑‍🎓 Энх (Хохирогч)</span>
+        <span style="background:var(--amber-lt);border:1.5px solid #fde68a;color:#92400e;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">🏫 ###-р сургуулийн захиргаа</span>
+        <span style="background:var(--blue-lt);border:1.5px solid #bfdbfe;color:#1e40af;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">🚔 Дүүргийн цагдаа</span>
+        <span style="background:var(--teal-lt);border:1.5px solid #99f6e4;color:#0f766e;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">🤝 Нийгмийн ажилтан</span>
+        <span style="background:var(--purple-lt);border:1.5px solid #ddd6fe;color:#5b21b6;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">⚖️ ХЭҮК-ын хянагч</span>
+        <span style="background:var(--g100);border:1.5px solid var(--g200);color:var(--g500);padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;">🌐 Олон нийт / Хэвлэл мэдээлэл</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="wrap" style="max-width:860px;">
+    <div class="sec-label">// Хэргийг Бүртгэх, шийдвэрлэх алхмууд</div>
+    <div class="sec-title">Энхийн хэргийг алхам алхмаар шийдвэрлэе!</div>
+    <div class="sec-desc">Алхам бүрд хэн юу хийх үүрэгтэй болох, үүргээ биелүүлээгүйг нь яаж мэдэх болон тэр дунд нь блокчэйн юуг бүртгэхтэй танилцана уу?</div>
+
+    <div style="display:flex;flex-direction:column;">
+
+      <!-- Step 1 -->
+      <div class="how-step">
+        <div class="how-step-line"></div>
+        <div class="how-num-col"><div class="how-num victim">1</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">Энх систем рүү ДАН-аар нэвтэрч өөрийгөө баталгаажуулна</div>
+            <div class="how-actor ha-victim">🧑‍🎓 Энх (хохирогч)</div>
+          </div>
+          <div class="how-desc">Иргэн бүрд нээлттэй танилт нэвтрэлтийн <strong>ДАН</strong> системийг ашиглан нэвтэрнэ — энэ систем хэдийнээ Монгол улсын бүхий л үйлчилгээнд бүрэн нэвтэрсэн баталгаажуулах аргачлал юм. Энхээс зөвшөөрлийг нь авч <strong>ХУР</strong> систем хувийн мэдээллийг нь татаад, түүнийг Хан-Уул дүүргийн ###-р сургуулийн 9-р ангид суралцаж байгааг баталгаажуулна.</div>
+          <div class="how-actions">
+            <div class="how-action"><div class="ha-icon ha-check">✓</div><div>ДАН-аар бодит иргэн хохирсон буюу гэмт хэрэг болсныг баталгаажуулна — эзэнгүй хуурамч, цуурхал гэж үгүйсгэх боломжгүй</div></div>
+            <div class="how-action"><div class="ha-icon ha-info">🏫</div><div>ХУР систем Хан-Уул дүүргийн ###-р сургууль гэдгийг нь баталгаажуулаад, харъяа цагдаа руу нь автоматаар мэдээлнэ — бүх юм автомат</div></div>
+            <div class="how-action"><div class="ha-icon ha-lock">🔒</div><div>Түүний нэр, хувийн мэдээллийг <strong>хэзээ ч хадгалахгүй</strong>. Зөвхөн нэг чиглэлт хэргийн бүртгэл үүсгэнэ: <strong>BLD-2025-04471</strong></div></div>
+          </div>
+          <div class="chain-box">
+            <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифр</div>
+            <div class="chain-line"><span class="chain-key">CASE_OPENED</span><span class="chain-sep"> | </span><span class="chain-val">case_id: BLD-2025-04471</span><span class="chain-sep"> | </span><span class="chain-val">school_id: SCH_0447</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T08:14:22Z</span></div>
+          </div>
+          <div class="callout co-blue"><div class="callout-icon">💡</div><p><strong>Гомдол, хэргийн бүртгэл хэзээ ч устахгүй.</strong> ###-р сургууль, цагдаа нар "бидэнд гомдол ирээгүй" гэж цаашид хэлэх эрхгүй болно. Бүртгэлийг блокчэйнээр хийх ба Энх аппыг нээснээс 8 минутын дараа цаг, огноотой нь блокчейн болгож үлдээнэ.</p></div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="how-step">
+        <div class="how-step-line"></div>
+        <div class="how-num-col"><div class="how-num victim">2</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">Энх гомдлоо илгээнэ</div>
+            <div class="how-actor ha-victim">🧑‍🎓 Энх (хохирогч)</div>
+          </div>
+          <div class="how-desc">Энхэд тохиолдсон хэргийг энгийн хэв загвар, асуулт бүхий гомдлын маягтаар бүртгэж авна — хуулийн мэдлэг, өргөдөл шаардлагагүй. Бөглөж дуусаагүй бол дахиад нээхэд байж л байна.</div>
+          <div class="how-actions">
+            <div class="how-action"><div class="ha-icon ha-info">📅</div><div>Хэргийн огноо, байршил, дээрэлхэлтийн төрөл (Биед халдсан + Сэтгэл санааны хүчирхийлэл гэх мэт)</div></div>
+            <div class="how-action"><div class="ha-icon ha-info">🎥</div><div>Нотолгоо байвал байршуулах боломжтой. Систем <strong>криптограф хэш/шифрээр нэн даруй нууцлан хадгална</strong> — цаг, огноогоор тамгалж, блокчейн үүсэх тул үгүйсгэх, өөрчлөх боломжгүй</div></div>
+            <div class="how-action"><div class="ha-icon ha-flag">🚨</div><div>"Танд одоо аюул заналхийлэл учирч байна уу?" гэж заавал асууна — Тэр <strong>"Тийм"</strong> гэж хариулбал "НЭН ДАРУЙ, ЯАРАЛТАЙ" гэсэн тэмдэглэл идэвхэждэг.</div></div>
+          </div>
+          <div class="chain-box">
+            <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифр</div>
+            <div class="chain-line"><span class="chain-key">REPORT_SUBMITTED</span><span class="chain-sep"> | </span><span class="chain-val">types: PHYSICAL,VERBAL,HUMILIATION</span><span class="chain-sep"> | </span><span class="chain-val">evidence_hash: 0xa4f3...</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:51Z</span></div>
+            <div class="chain-line"><span class="chain-key">SAFETY_FLAG_URGENT</span><span class="chain-sep"> | </span><span class="chain-val">notified: SOCIAL_WORKER, OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:52Z</span></div>
+          </div>
+          <div class="callout co-red"><div class="callout-icon">🚨</div><p>Энх аюулгүй биш гэдгээ мэдэгдсэн тул Нийгмийн ажилтан болон ХЭҮК-н хянагч нарт <strong>нэн даруй</strong> мэдээлнэ — сургуулийн шийдвэрийг хүлээхгүй. Тэдэнд хариу өгөх хугацааг <strong>4 цаг</strong> гэж хатуу тогтооно.</p></div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="how-step">
+        <div class="how-step-line"></div>
+        <div class="how-num-col"><div class="how-num school">3</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">###-р сургууль 24 цагийн дотор гомдлыг хянаж, шалгана</div>
+            <div class="how-actor ha-school">🏫 СУРГУУЛИЙН ЗАХИРГАА</div>
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:6px;background:var(--amber-lt);color:#92400e;font-family:var(--mono);font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;margin-bottom:12px;">⏱ ХУГАЦАА: 24 цаг — 3-р сарын 11, 09:02 хүртэл</div>
+          <div class="how-desc">Сургууль гомдолд дурдсан дээрэлхэлтийн төрөл болон ноцтой байдлыг шалгана, гэхдээ <strong>Энхийн нэрийг харахгүй</strong>. Хэргийг хяналтандаа авч, зохицуулагч томилох ёстой.</div>
+          <div class="how-actions">
+            <div class="how-action"><div class="ha-icon ha-check">✓</div><div>Сургууль гомдлыг 24 цагийн дотор хянан шалгаж эхэллээ гэж төлөвийг өөрчлөн, ажлаа эхлүүлэх ёстой ба төлөв өөрчлөгдсөн даруйд блокчейн үүсэж, үйлдлийн мөрийг хадгална.</div></div>
+            <div class="how-action"><div class="ha-icon ha-warn">⚠️</div><div><strong>Ашиг сонирхлын зөрчил гарвал яах вэ?:</strong> Багшийн хүүхэд хэрэгт дурдсан байвал сургуулийн захиргаа тэмдэглэнэ. Систем тухайн хэргийг сургуулийн хяналтаас <strong>автоматаар гаргаж</strong> дээд түвшний хяналтын байгууллага руу шилжүүлнэ.</div></div>
+          </div>
+          <div class="chain-box">
+            <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифр</div>
+            <div class="chain-line"><span class="chain-key">ACTION_LOGGED</span><span class="chain-sep"> | </span><span class="chain-val">actor: SCHOOL_ADMIN</span><span class="chain-sep"> | </span><span class="chain-val">action: ACKNOWLEDGED</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T14:33:01Z</span></div>
+            <div class="chain-line"><span class="chain-key">CONFLICT_REROUTED</span><span class="chain-sep"> | </span><span class="chain-val">rerouted_to: DISTRICT_AUTHORITY</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T14:35:20Z</span></div>
+          </div>
+          <div class="callout co-amber"><div class="callout-icon">⚠️</div><p><strong>Хэрэв сургууль 24 цагийн дотор хянан шалгаагүй бол:</strong> 3-р сарын 11-ний 09:03 цагт систем автоматаар сургуулиас дээших хяналтын байгууллага (ХЭҮК гэх мэт)-д мэдэгдэж, процессын алхам, үе шатанд <strong>DEADLINE_MISSED буюу ХЯНААГҮЙ</strong> гэж бичнэ. Сургуулийн үүрэг хариуцлагын оноо буурна. Буцаах, өөрчлөх боломжгүй!</p></div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="how-step">
+        <div class="how-step-line"></div>
+        <div class="how-num-col"><div class="how-num system">4</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">Гомдлыг гурван зэрэг шалгаж эхэлнэ</div>
+            <div class="how-actor ha-multi">🔀 БҮГД</div>
+          </div>
+          <div class="how-desc">Гурван хяналт шалгалтын үүрэг бүхий оролцогч талууд нэг нэгнийхээ дараа биш зэрэг ажиллаж эхэлнэ. Энэ нь хэргийг нам гүм дарагдахад хүргэдэг "сургууль юм хийхийг хүлээх" хандлагыг арилгана.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:12px 0;">
+            <div style="border:1px solid #fcd34d;border-radius:10px;padding:16px;background:var(--amber-lt);">
+              <div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:6px;">🏫 Хянагч 1 — Сургууль</div>
+              <div style="font-size:12px;color:#78350f;line-height:1.6;">Сурагчидтай ярилцах, баримт нотолгоо олох, бүртгэх, зохих сануулга, шийтгэлийг боловсруулах.<br><strong>Хугацаа: 5 ажлын өдөрт багтаах ёстой</strong></div>
+            </div>
+            <div style="border:1px solid #93c5fd;border-radius:10px;padding:16px;background:#eff6ff;">
+              <div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:6px;">🚔 Хянагч 2 — Цагдаа</div>
+              <div style="font-size:12px;color:#1e3a8a;line-height:1.6;">Гомдлыг автоматаар илгээж, харуулах болно. Цагдаа хянаад хэргийн бүртгэл үүсгэнэ.<br><strong>Хугацаа: 48 цагт багтаах ёстой</strong></div>
+            </div>
+            <div style="border:1px solid #99f6e4;border-radius:10px;padding:16px;background:var(--teal-lt);">
+              <div style="font-size:13px;font-weight:700;color:#0f766e;margin-bottom:6px;">🤝 Хянагч 3 - Халамж, хамгааллын байгууллага</div>
+              <div style="font-size:12px;color:#134e4a;line-height:1.6;">Гэр бүлтэй холбогдож, аюулгүй байдлын үнэлгээ, заавар зөвлөмж өгнө.<br><strong>Хугацаа: ЯАРАЛТАЙ учраас 4 цагийн дотор</strong></div>
+            </div>
+          </div>
+          <div class="callout co-blue"><div class="callout-icon">📌</div><p>Хянагч бүрийн үйл ажиллагааг блокчэйнд бүртгэнэ. <strong>Хэн ч процессын алхам, үе шатад оролцохгүйгээр "бид ажлаа хийсэн шүү дээ" гэж хэлж чадахгүй</strong> — мөн "бид мэдээгүй, бидэнд мэдээлээгүй" гэж хэлэх боломжгүй, учир нь систем хэргийг автоматаар мэдээлж, хүргэсэн байх болно.</p></div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="how-step">
+        <div class="how-step-line"></div>
+        <div class="how-num-col"><div class="how-num victim">5</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">Цагдаа гомдол, хэргийг удаавал систем автоматаар зэргийг ахиулж, дараагийн шатны байгууллагад мэдээлнэ</div>
+            <div class="how-actor ha-ombudsman">⚖️ СИСТЕМЭЭС → ХЭҮК, ТББ гэх мэт</div>
+          </div>
+          <div class="how-desc">Цагдаа гомдлыг хүлээн авч хэрэг нээчхээд 15 хоногийн турш юм хийгээгүй бол 14 хоногийн дотор мөрдөх, шийдвэрлэх  хугацааг хэтрүүлсэн гэж тэмдэглэнэ.</div>
+          <div class="how-actions">
+            <div class="how-action"><div class="ha-icon ha-flag">⏰</div><div>14 дэх өдөр цагдаагаас систем, процессын алхмуудад ямар нэг өөрчлөлт хийгээгүй бол <strong>МӨРДЛӨГТ СААД УЧРУУЛСАН</strong> гэж процесст тэмдэглэж, дээд шатны хяналтын байгууллага (ХЭҮК, ТББ гэх мэт)-уудад нэн даруй мэдээлнэ</div></div>
+            <div class="how-action"><div class="ha-icon ha-info">📊</div><div>Ийнхүү гомдол, хэргийг удааж байгааг нийтэд нээлттэй мэдээлэх цагдаагийн статистикт бүртгэнэ. Цаашлаад, систем хэрэг шийдвэрлэх дундаж хугацаа болон хойшилсон давтамжийг тэмдэглэж, Монгол даяар ил тод мэдээлнэ</div></div>
+          </div>
+          <div class="chain-box">
+            <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифр</div>
+            <div class="chain-line"><span class="chain-key">STALL_DETECTED</span><span class="chain-sep"> | </span><span class="chain-val">actor: POLICE_UNIT_17</span><span class="chain-sep"> | </span><span class="chain-val">days_elapsed: 15</span><span class="chain-sep"> | </span><span class="chain-val">escalated_to: OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-25T09:02:51Z</span></div>
+          </div>
+          <div class="callout co-purple"><div class="callout-icon">⚖️</div><p><strong>Цагдаа энэ процессыг удаах, зогсоох боломжгүй.</strong> Өөрөөр хэлбэл, хүний оролцоогүйгээр шат ахиулж, хугацаа хэтэрсэн гэдгийг мэдээлэх юм. Энэ хугацаа хэтэрсэн, удаасан явдлыг тэмдэглэж, нийтэд нээлттэй мэдээлсээр байх болно.</p></div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="how-step">
+        <div class="how-num-col"><div class="how-num resolve">6</div></div>
+        <div class="how-content">
+          <div class="how-header">
+            <div class="how-title">Процессын эцэст зөвхөн Энх хэргээ хаах боломжтой</div>
+            <div class="how-actor ha-resolve">✅ ЗӨВХӨН ЭНХ</div>
+          </div>
+          <div class="how-desc">Хугацаа удсаар бүх дээд түвшний хяналтын байгууллага цагдаа, сургуулийн үйл ажиллагааг шалгаж, хэргийг шийдвэрлээгүй учир шалтгаан, үр дүнг процесст тэмдэглэн үлдээж, хадгална. Үүнийг оролцогч тал бүрд, ялангуяа Энхэд харуулна. Ийнхүү хэрэг хаах эсэхээ зөвхөн Энх шийднэ.</div>
+          <div class="how-actions">
+            <div class="how-action"><div class="ha-icon ha-check">✓</div><div>Түүнд хэргийг хаахтай холбоотой 3 сонголт бий: Сэтгэлд хүрэхүйц хэмжээнд асуудлыг шийдвэрлэсэн тул гомдлыг хаах // Сэтгэл хүрэхүйц шийдвэр гараагүй ч гомдлыг хаах // Гомдлыг үргэлжлүүлж дахин хянахыг шаардах (Шууд ХЭҮК, ТББ гэх мэт рүү)</div></div>
+            <div class="how-action"><div class="ha-icon ha-warn">⏱</div><div><strong>Гомдлыг сэргээх 72 цагийн хугацаа бий</strong>: Гомдлыг хаалаа гээд хэргийг нэн даруй хаахгүй. Дарамт шахалтаар хаасан бол 72 цагийн дотор гомдлыг сэргээх боломжтой.</div></div>
+          </div>
+          <div class="chain-box">
+            <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифр</div>
+            <div class="chain-line"><span class="chain-key">CASE_CLOSED</span><span class="chain-sep"> | </span><span class="chain-val">closed_by: VICTIM</span><span class="chain-sep"> | </span><span class="chain-val">method: SATISFIED</span><span class="chain-sep"> | </span><span class="chain-val">cooldown_expires: +72hrs</span><span class="chain-sep"> | </span><span class="chain-ts">2025-04-08T17:33:22Z</span></div>
+          </div>
+          <div class="callout co-green"><div class="callout-icon">✅</div><p><strong>Хохирогчоос өөр хэн ч хэргийг хааж чадаагүй.</strong> Сургууль ч биш. Цагдаа ч биш. Нийгмийн ажилтан ч биш. Хэрэг хаагдах эсэх нь зөвхөн Энх охины шийдвэр байх болно.</p></div>
+        </div>
+      </div>
+
+    </div><!-- end steps -->
+
+    <!-- 7 Principles -->
+    <div style="margin-top:48px;">
+      <div class="sec-label">// Уг систем ямар логиктой вэ?</div>
+      <div class="sec-title">Системийн 7 дүрэм</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:20px;">
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">01</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Хохирогчийг нэн тэргүүнд тавина</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Зөвхөн хохирогч л бүх хэргийг эхлүүлнэ, эсвэл хаана. Ямар ч байгууллага хэрэг нээх, хаах эрхгүй.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">02</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Нууцлал, нотолгоог чандлан сахина</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Нууц мэдээллийг төрийн системд л хадгална. Харин Блокчэйнээр үйлдэл бүрийн мөр, нотолгоо болох хэш/шифрийг хадгална.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">03</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Нууцлалтайгаар хохирогчийг баталгаажуулна</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Хохирогч зөвхөн ДАН-аар өөрийгөө баталгаажуулахад л болно. Нарийвчилсан бүртгэл, бүтэн нэр хэрэггүй — зөвхөн гомдол, хэргийн дугаартай байна.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">04</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Бүх оролцогч талыг хөшүүрэгжүүлнэ</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Оролцогч тал бүр үүргээ биелүүлэх хатуу хугацаатай. Хугацаа өнгөрөх тутам систем автоматаар бүртгэж, хэтрүүлбэл автоматаар  дээд шатанд мэдээлнэ.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">05</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Хэргийг гацаахгүйгээр шийдвэрлэнэ</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Процессын үе шат, алхмын хугацаа хэтэрсэн даруйд дээд шатны байгууллага руу автоматаар мэдээлнэ. Хэргийг удаавал хүн болгон мэднэ, гэхдээ шийдвэрлэх явц үргэлжилсээр байх болно.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">06</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Нийтэд мэдээлэх ч хувийн мэдээллийг нууцална</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Гомдол, хэргийн дэлгэрэнгүй бүртгэлийг зөвхөн шууд оролцогч талуудад харуулна. Харин нийт гомдол, хэргийн тоо, шийдвэрлэх хугацааг нийтэд нээлттэй болгоно — гүйцэтгэлийг хэмжиж, жагсааж, долоо хоног бүр шинэчилнэ.</div></div>
+        <div class="card" style="padding:18px;"><div style="font-family:var(--mono);font-size:11px;color:var(--g400);margin-bottom:6px;">07</div><div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:5px;">Төрийн эзэмшилд зориулсан логиктой</div><div style="font-size:12px;color:var(--g500);line-height:1.6;">Системийн архитектур, логикийг төр цаашид хариуцаж явахад асуудалгүй байхаар гаргасан. Төр шийдлийг шууд хүлээж авна; Гэхдээ бас хариуцлагыг ч хамт авна.</div></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="margin-top:48px;text-align:center;padding:40px;background:var(--navy2);border-radius:var(--radius-lg);">
+      <div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:8px;">Туршилтын системийг үзнэ үү</div>
+      <div style="font-size:14px;color:var(--g400);margin-bottom:24px;">Нэвтрэлт, гомдол гаргах, хэрэг хянах болон нийтийн статистикийг туршиж үзнэ үү.</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-lg" onclick="showPage('login')">🔐 Нэвтрэлтээс эхлэх</button>
+        <button class="btn btn-ghost btn-lg" onclick="showPage('stats')">📊 Статистик үзэх</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 2 — LOGIN FLOW
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-login">
+  <div class="hero" style="padding:48px 24px 36px;">
+    <div class="hero-tag">// Нэгдүгээр алхам — ХУВИЙН МЭДЭЭЛЛЭЭ БАТАЛГААЖУУЛАХ</div>
+    <h1 class="hero-h1" style="font-size:36px;">Аюулгүй Нэвтрэлт — <em>ДАН</em></h1>
+    <p class="hero-sub" style="font-size:14px;">Засгийн газрын бүх үйлчилгээнд ашигладаг танилт, нэвтрэлтийн систем. Шинэ бүртгэл, аккаунт, нууц үг шаардлагагүй.</p>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login-progress">
+      <div class="lp-dot active" id="lp1"></div>
+      <div class="lp-dot" id="lp2"></div>
+      <div class="lp-dot" id="lp3"></div>
+      <div class="lp-dot" id="lp4"></div>
+    </div>
+
+    <!-- Step 1: Enter DAN ID -->
+    <div class="login-step active" id="ls-1">
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:6px;">Та регистрийн дугаараа оруулна уу?</div>
+      <div style="font-size:14px;color:var(--g500);margin-bottom:28px;">Үүгээр таныг зөвхөн бодит иргэн гэдгийг баталгаажуулахад ашиглах ба хувийн мэдээллийг тань хэзээ ч хадгалахгүй.</div>
+      <div class="form-group">
+        <label class="form-label">ДАН руу нэвтрэх регистрийн дугаар <span>*</span></label>
+        <div class="dan-input-wrap">
+          <span class="dan-prefix">MN-</span>
+          <input class="form-input dan-real-input" id="dan-input" type="text" placeholder="e.g. 8847201503" value="8847201503" maxlength="10">
+        </div>
+        <div class="form-hint">Формат: 10 оронтой тоо. Иргэний үнэмлэхэнд байна.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Нууц үгээ оруулна уу? <span>*</span></label>
+        <input class="form-input" type="password" id="dan-pin" placeholder="••••••" value="123456" maxlength="6">
+        <div class="form-hint">Туршилтын хувьд дурын 6 оронтой тоо оруулна уу.</div>
+      </div>
+      <div class="callout co-blue"><div class="callout-icon">🔒</div><p>BoLiYo таны ДАН нэвтрэх мэдээллийг хэзээ ч хадгалдаггүй. Баталгаажуулалтыг бүхэлд нь төрийн ДАН систем гүйцэтгэнэ. Бид зөвхөн баталгаажуулалтын токен хүлээн авна.</p></div>
+      <div style="margin-top:24px;display:flex;gap:12px;">
+        <button class="btn btn-primary btn-lg" style="width:100%" onclick="loginStep1()">ДАН-аар үргэлжлүүлэх →</button>
+      </div>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--g400);">Асуудал гарсан уу? <a href="#" style="color:var(--blue3);">ДАН системтэй ХХХХ-ХХХХ утсаар холбогдоно уу</a></div>
+    </div>
+
+    <!-- Step 2: Loading -->
+    <div class="login-step" id="ls-2">
+      <div style="text-align:center;padding:40px 0;">
+        <div class="loading-spin"></div>
+        <div style="font-size:16px;font-weight:600;color:var(--g700);margin-bottom:6px;" id="loading-text">ДАН-тай холбогдож байна...</div>
+        <div style="font-size:13px;color:var(--g400);">Төрийн баталгаажуулалтын системээр хувийн мэдээллийг шалгаж байна</div>
+      </div>
+    </div>
+
+    <!-- Step 3: HUR school confirm -->
+    <div class="login-step" id="ls-3">
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:6px;">Сургуулиа баталгаажуулна уу</div>
+      <div style="font-size:14px;color:var(--g500);margin-bottom:20px;">Хувийн мэдээлэл баталгаажлаа ✓ — <strong>ХУР</strong>-аас дараах сургуулийн тухай мэдээллийг авлаа. Үргэлжлүүлэхийн өмнө зөв эсэхийг баталгаажуулна уу.</div>
+      <div class="school-confirm-card">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--blue);margin-bottom:12px;">ХУР ЭЛСЭЛТИЙН МЭДЭЭЛЭЛ — ЗӨВШӨӨРӨЛ ӨГСӨН</div>
+        <div class="school-row"><span class="school-row-label">Сургууль</span><span class="school-row-val">###-р сургууль — Хан-Уул дүүрэг</span></div>
+        <div class="school-row"><span class="school-row-label">Сургууль ID</span><span class="school-row-val">SCH_0447</span></div>
+        <div class="school-row"><span class="school-row-label">Анги</span><span class="school-row-val">9-р анги</span></div>
+        <div class="school-row"><span class="school-row-label">Дүүрэг</span><span class="school-row-val">Хан-Уул, Улаанбаатар</span></div>
+        <div class="school-row"><span class="school-row-label">Харьяа цагдаагийн хэлтэс</span><span class="school-row-val">Хан-Уул дүүргийн цагдаагийн хэлтэс</span></div>
+      </div>
+      <div class="callout co-amber"><div class="callout-icon">⚠️</div><p>Энэ мэдээллийг <strong>зөвхөн таны гомдлыг </strong> зөв сургууль болон цагдаагийн хэлтсийн харьяанд шилжүүлэхэд ашиглана. Таны хувийн мэдээллийг бүртгэлд ерөөсөө хадгалахгүй.</p></div>
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1" onclick="loginStep3()">Тийм, энэ миний сургууль →</button>
+        <button class="btn btn-secondary" onclick="loginStep3wrong()">Буруу байна</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Success -->
+    <div class="login-step" id="ls-4">
+      <div style="text-align:center;">
+        <div class="success-icon">✓</div>
+        <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:8px;">Хувийн мэдээлэл баталгаажлаа</div>
+        <div style="font-size:14px;color:var(--g500);margin-bottom:28px;">Та аюулгүйгээр нэвтэрсэн. Гомдлын бүртгэл үүслээ.</div>
+      </div>
+      <div style="background:var(--navy);border-radius:var(--radius-sm);padding:20px;margin-bottom:20px;">
+        <div style="font-family:var(--mono);font-size:11px;color:#3b5fa0;margin-bottom:12px;letter-spacing:2px;">ТАНЫ ГОМДЛЫН МЭДЭЭЛЭЛ</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:12px;color:var(--g400);">Гомдлын дугаар</span><span style="font-family:var(--mono);font-size:14px;color:#60a5fa;font-weight:600;">BLD-2025-04471</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:12px;color:var(--g400);">Гомдлын нууц үг, ПИН (хадгалаарай)</span><span style="font-family:var(--mono);font-size:14px;color:#4ade80;font-weight:600;">7841-KBZX</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:var(--g400);">Бүртгэгдсэн огноо</span><span style="font-size:12px;color:var(--g400);">2025-03-10 08:14:22</span></div>
+      </div>
+      <div class="chain-box">
+        <div class="chain-box-label">⛓ Блокчейнд хадгалсан нь:</div>
+        <div class="chain-line"><span class="chain-key">CASE_OPENED</span><span class="chain-sep"> | </span><span class="chain-val">case_id: BLD-2025-04471</span><span class="chain-sep"> | </span><span class="chain-val">school_id: SCH_0447</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T08:14:22Z</span></div>
+      </div>
+      <button class="btn btn-primary btn-lg" style="width:100%;margin-top:20px;" onclick="goToReport()">Гомдол гаргахаар үргэлжлүүлэх →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 3 — REPORT FLOW
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-report">
+  <div class="hero" style="padding:48px 24px 36px;">
+    <div class="hero-tag">// Хоёрдугаар алхам — ГОМДЛЫН МАЯГТ БӨГЛӨХ</div>
+    <h1 class="hero-h1" style="font-size:36px;">Гомдол <em>гаргах</em></h1>
+    <p class="hero-sub" style="font-size:14px;">Энгийн, амархан - Хуулийн мэдлэг, өргөдөл шаардлагагүй. Бөглөх зуураа орхиж гарвал автоматаар хадгална. Гомдлын дугаар: <strong style="color:#60a5fa;">BLD-2025-04471</strong></p>
+  </div>
+
+  <div class="wrap" style="max-width:680px;">
+    <div class="report-stepper">
+      <div class="rs-step active" id="rss-1" onclick="goReportStep(1)"><span class="rs-step-num">1</span>Гомдлын дэлгэрэнгүй</div>
+      <div class="rs-step" id="rss-2" onclick="goReportStep(2)"><span class="rs-step-num">2</span>Хэргийн оролцогчид</div>
+      <div class="rs-step" id="rss-3" onclick="goReportStep(3)"><span class="rs-step-num">3</span>Нотлох баримт хавсаргах</div>
+      <div class="rs-step" id="rss-4" onclick="goReportStep(4)"><span class="rs-step-num">4</span>Аюулгүй байдлаа мэдээлэх</div>
+      <div class="rs-step" id="rss-5" onclick="goReportStep(5)"><span class="rs-step-num">5</span>Гомдлыг илгээх</div>
+    </div>
+
+    <!-- Panel 1: Incident -->
+    <div class="report-panel active" id="rp-1">
+      <div class="sec-title" style="font-size:20px;margin-bottom:20px;">Болсон үйл явдлыг тайлбарлана уу?</div>
+      <div class="field-row">
+        <div class="form-group">
+          <label class="form-label">Анхны дээрэлхэлтэд өртсөн огноо <span>*</span></label>
+          <input class="form-input" type="date" value="2025-02-18">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Сүүлд хэзээ дээрэлхэлтэд өртсөн бэ? <span>*</span></label>
+          <input class="form-input" type="date" value="2025-03-08">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Хэдэн удаа дээрэлхэлтэд өртсөн бэ? <span>*</span></label>
+        <select class="form-input">
+          <option>Нэг удаа</option>
+          <option selected>Олон удаа (3–10)</option>
+          <option>Маш олон удаа (10+)</option>
+          <option>Хариулмааргүй байна</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Хаана болсон бэ? <span>*</span></label>
+        <select class="form-input">
+          <option selected>Сургуулийн коридорт</option>
+          <option>Анги дотор</option>
+          <option>Сургуулийн талбайд</option>
+          <option>Онлайн / Цахим орчинд</option>
+          <option>Сургуулиас гадуур</option>
+          <option>Өөр өөр байршилд</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Та ямар дээрэлхэлтэд өртсөн бэ? <span>*</span> (олон сонголттой)</label>
+        <div class="checkbox-grid">
+          <div class="checkbox-card selected" onclick="toggleCheck(this)"><input type="checkbox" checked><label>👊 Зодож гэмтээсэн</label></div>
+          <div class="checkbox-card selected" onclick="toggleCheck(this)"><input type="checkbox" checked><label>🗣 Аман хүчирхийлэл</label></div>
+          <div class="checkbox-card selected" onclick="toggleCheck(this)"><input type="checkbox" checked><label>😳 Сэтгэл санааны хүчирхийлэл</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>💻 Цахим орчинд дарамталсан</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>🚫 Ялгаварлан гадуурхсан</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>💰 Эд хөрөнгөөр хохироосон</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>😨 Айлгаж, сүрдүүлсэн</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>🔞 Бэлгийн дарамт үзүүлсэн</label></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Болсон явдлыг өөрийн үгээр тайлбарлана уу <span>*</span></label>
+        <textarea class="form-input" rows="5" placeholder="Буруу, зөв гэж эргэлзэлгүйгээр бичээрэй. Бид таныг шүүмжлэхгүй.">Сургуулийн гурван хүүхэд завсарлагаанаар намайг сургуулийн коридорт хэдэн долоо хоногийн турш зодож, цохиж байна. Тэд зодох зуураа намайг элдвээр хэлдэг, нэг удаа ангийнхны өмнө миний курткийг урсан. Ангийн нэг хүүхдийн утсанд бичлэг байгаа.</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Энэ танд хэрхэн нөлөөлсөн бэ?</label>
+        <div class="checkbox-grid">
+          <div class="checkbox-card selected" onclick="toggleCheck(this)"><input type="checkbox" checked><label>😰 Сургуульд явахаас айдаг болсон</label></div>
+          <div class="checkbox-card selected" onclick="toggleCheck(this)"><input type="checkbox" checked><label>😔 Сэтгэл зүйн хямралтай болсон</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>🤕 Биед гэмтэл учирсан</label></div>
+          <div class="checkbox-card" onclick="toggleCheck(this)"><input type="checkbox"><label>📉 Сурлага муудсан</label></div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="goReportStep(2)">Дараагийн хэсэг: Хэргийн оролцогчид →</button>
+    </div>
+
+    <!-- Panel 2: Parties -->
+    <div class="report-panel" id="rp-2">
+      <div class="sec-title" style="font-size:20px;margin-bottom:20px;">Хэн оролцсон бэ?</div>
+      <div class="callout co-blue"><div class="callout-icon">ℹ️</div><p>Нэрийг нь заавал бүтэн, зөв бичих шаардлагагүй. Мэдэж байгаагаа л хэлнэ үү. Мөрдөгчдөд мэдэж байгаа бүхэн тань тус болно.</p></div>
+      <div class="form-group" style="margin-top:16px;">
+        <label class="form-label">Гэмт этгээдийг тайлбарлана уу</label>
+        <textarea class="form-input" rows="3" placeholder="Нэр, ангийг нь мэддэг үү? Ямархуу царайтай вэ? Мэдэх бүхнээ бичээрэй">Гурван эрэгтэй сурагч, ойролцоогоор 9 эсвэл 10-р ангийн. Нэгийг нь дандаа Батаа гэж дууддаг. Нэг нь энэ сургуулийн багшийн хүүхэд байж болзошгүй.</textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Гэрч байсан уу?</label>
+        <select class="form-input">
+          <option selected>Тийм — бусад сурагчид харсан</option>
+          <option>Тийм — нэг сурагч</option>
+          <option>Үгүй</option>
+          <option>Мэдэхгүй байна</option>
+        </select>
+        <div class="form-hint">Та гэрч байсан эсэхийг л мэдээлэхэд хангалттай шүү.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Та сургуульдаа энэ хэргийн талаар урьд нь мэдээлж байсан уу?</label>
+        <select class="form-input">
+          <option selected>Тийм — өмнө нь анги удирдсан багшид хэлсэн</option>
+          <option>Тийм — нэг зодооны үеэр багш ойр байсан</option>
+          <option>Үгүй</option>
+          <option>Мэдэхгүй байна</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Энэ тухай урьд өмнө гомдол гаргасан уу?</label>
+        <select class="form-input">
+          <option selected>Тийм — эцэг, эх нь сургуулийн захиргаанд мэдээлсэн</option>
+          <option>Тийм — сургуулийн нийгмийн ажилтанд хэлсэн</option>
+          <option>Үгүй — анх удаа мэдээлж байна</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Гэмт этгээдийн талаар нэмэлт мэдээлэл бичих (заавал бөглөх шаардлагагүй шүү)</label>
+        <textarea class="form-input" rows="2" placeholder="Бусад мэдээлэл…">Нэг гэмт этгээдийн эцэг эх энэ сургуульд багшаар ажилладаг гэж бодож байна.</textarea>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="goReportStep(1)">← Буцах</button>
+        <button class="btn btn-primary" style="flex:2" onclick="goReportStep(3)">Дараа нь: Нотлох баримт хавсаргах →</button>
+      </div>
+    </div>
+
+    <!-- Panel 3: Evidence -->
+    <div class="report-panel" id="rp-3">
+      <div class="sec-title" style="font-size:20px;margin-bottom:8px;">Нотлох баримт хавсаргах</div>
+      <div class="sec-desc" style="margin-bottom:20px;">Байгаа бүх нотлох баримтаа оруулаарай. Байршуулсан баримт болгоныг тань блокчэйнээр нууцлах болно.</div>
+      <div class="evidence-drop" onclick="simulateUpload()" id="ev-drop">
+        <div class="ed-icon">📎</div>
+        <div class="ed-text">Файл оруулахын тулд чирж авчрах юмуу "оруулах" товчийг дараарай</div>
+        <div class="ed-sub">Зураг, видео, screenshot, дуут мессеж — бүх форматын мэдээлэл хүлээн авна</div>
+      </div>
+      <div id="ev-items">
+        <div class="evidence-item">
+          <span class="ei-icon">🎥</span>
+          <div style="flex:1"><div class="ei-name">Зодооны_бичлэг.mp4</div><div class="ei-hash">hash: 0xa4f3b2c1d8e9...</div></div>
+          <span class="ei-badge">Амжилттай блокчейн болгож, нууцаллаа ✓</span>
+        </div>
+        <div class="evidence-item">
+          <span class="ei-icon">📸</span>
+          <div style="flex:1"><div class="ei-name">гарын_хөхрөлт.jpg</div><div class="ei-hash">hash: 0xf7e2a1c4b3d8...</div></div>
+          <span class="ei-badge">Амжилттай блокчейн болгож, нууцаллаа ✓</span>
+        </div>
+      </div>
+      <div class="chain-box" style="margin-top:16px;">
+        <div class="chain-box-label">⛓ Блокчэйнд битүүмжлэгдсэн нотлох баримт</div>
+        <div class="chain-line"><span class="chain-key">EVIDENCE_SEALED</span><span class="chain-sep"> | </span><span class="chain-val">file: Зодооны_бичлэг.mp4</span><span class="chain-sep"> | </span><span class="chain-val">hash: 0xa4f3b2c1...</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:00:14Z</span></div>
+        <div class="chain-line"><span class="chain-key">EVIDENCE_SEALED</span><span class="chain-sep"> | </span><span class="chain-val">file: гарын_хөхрөлт.jpg</span><span class="chain-sep"> | </span><span class="chain-val">hash: 0xf7e2a1c4...</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:00:31Z</span></div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:16px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="goReportStep(2)">← Буцах</button>
+        <button class="btn btn-primary" style="flex:2" onclick="goReportStep(4)">Дараа: Аюулгүй байдлаа мэдээлэх →</button>
+      </div>
+    </div>
+
+    <!-- Panel 4: Safety -->
+    <div class="report-panel" id="rp-4">
+      <div class="sec-title" style="font-size:20px;margin-bottom:8px;">Таны аюулгүй байдлыг үнэлэх гэж байна</div>
+      <div class="sec-desc" style="margin-bottom:20px;">Эдгээр асуултаар таны нөхцөл байдал ба шаардлагатай туслалцааг тодорхойлох юм.</div>
+      <div class="form-group">
+        <label class="form-label" style="font-size:16px;font-weight:700;color:var(--navy2);">Та одоо аюулгүй байна уу? <span>*</span></label>
+        <div class="safety-btns">
+          <div class="safety-btn" id="sf-yes" onclick="setSafety('yes')"><div class="sb-icon">😌</div><div class="sb-label">Тийм, аюулгүй байна</div></div>
+          <div class="safety-btn sel-no" id="sf-no" onclick="setSafety('no')"><div class="sb-icon">😨</div><div class="sb-label">Үгүй, аюулгүй биш байна</div></div>
+          <div class="safety-btn" id="sf-unsure" onclick="setSafety('unsure')"><div class="sb-icon">😟</div><div class="sb-label">Мэдэхгүй байна</div></div>
+        </div>
+      </div>
+      <div class="callout co-red" id="safety-warn" style="display:flex;">
+        <div class="callout-icon">🚨</div>
+        <p><strong>Та аюулгүй биш гэдгээ мэдэгдсэн тул:</strong> Таны гомдлыг нийгмийн ажилтан болон ХЭҮК руу нэн даруй мэдэгдэнэ. Тэд танд <strong>4 цагийн дотор</strong> хариу өгнө. Таны аюулгүй байдал хамгийн тэргүүнд байх болно.</p>
+      </div>
+      <div class="section-divider"></div>
+      <div class="form-group">
+        <label class="form-label">Та ямар үр дүн хүсэж байна вэ?</label>
+        <div class="outcome-grid">
+          <div class="outcome-card selected" onclick="toggleOutcome(this)"><div class="oc-icon">🛑</div><div class="oc-label">Дээрэлхэлтийг зогсоох</div></div>
+          <div class="outcome-card selected" onclick="toggleOutcome(this)"><div class="oc-icon">🔍</div><div class="oc-label">Мөрдлөг хийлгэх</div></div>
+          <div class="outcome-card" onclick="toggleOutcome(this)"><div class="oc-icon">⚖️</div><div class="oc-label">Албан ёсны шийтгэл</div></div>
+          <div class="outcome-card" onclick="toggleOutcome(this)"><div class="oc-icon">🤝</div><div class="oc-label">Албан ёсоор уучлалт гуйлгах</div></div>
+          <div class="outcome-card" onclick="toggleOutcome(this)"><div class="oc-icon">📝</div><div class="oc-label">Зүгээр л хувийн хэрэгт нь тэмдэглүүлэх</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn btn-secondary" style="flex:1" onclick="goReportStep(3)">← Буцах</button>
+        <button class="btn btn-primary" style="flex:2" onclick="goReportStep(5)">Гомдлыг илгээх →</button>
+      </div>
+    </div>
+
+    <!-- Panel 5: Submit -->
+    <div class="report-panel" id="rp-5">
+      <div id="rp5-review">
+        <div class="sec-title" style="font-size:20px;margin-bottom:8px;">Та гомдлоо хянана уу</div>
+        <div class="sec-desc" style="margin-bottom:20px;">Та гомдлоо илгээхийн өмнө мэдээллээ шалгана уу? Илгээсний дараа таны гомдлыг блокчэйнд нууцлан хадгалах ба устгах боломжгүй болно.</div>
+        <div style="background:var(--g50);border:1px solid var(--g200);border-radius:var(--radius-sm);padding:20px;margin-bottom:20px;">
+          <div style="display:grid;gap:12px;">
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Хэргийн дугаар</div><div style="font-size:13px;font-family:var(--mono);color:var(--blue);">BLD-2025-04471</div></div>
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Сургууль</div><div style="font-size:13px;color:var(--g800);">###-р сургууль, Хан-Уул (автоматаар баталгаажсан)</div></div>
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Дээрэлхэлтийн төрөл</div><div style="font-size:13px;color:var(--g800);">Зодож гэмтээсэн, Аман хүчирхийлэл</div></div>
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Огноо</div><div style="font-size:13px;color:var(--g800);">2025 оны 2/18 – 3/8 (олон хэрэг)</div></div>
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Нотлох баримт</div><div style="font-size:13px;color:var(--g800);">2 файл байршуулж, битүүмжлэгдсэн</div></div>
+            <div style="display:flex;gap:12px;"><div style="font-size:13px;font-weight:600;color:var(--g500);width:140px;flex-shrink:0;">Аюулгүй байдлын үнэлгээ</div><div style="font-size:13px;color:var(--red);font-weight:700;">⚠ АЮУЛГҮЙ БИШ — Яаралтай</div></div>
+          </div>
+        </div>
+        <div class="callout co-amber"><div class="callout-icon">⚠️</div><p>Та үүнийг илгээснээрээ өөрийн мэдэх бүхий л мэдээллийг энэ гомдолд үнэн зөвөөр нь хавсарган оруулсан гэдгээ хүлээн зөвшөөрч байгаа болно. Ийнхүү гомдлыг <strong>###-р сургуулийн захиргаа, Хан-Уул дүүргийн цагдаагийн хэлтэс болон Нийгмийн ажилтанд</strong> илгээнэ.</p></div>
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;">
+          <button class="btn btn-secondary" style="flex:1" onclick="goReportStep(4)">← Буцах</button>
+          <button class="btn btn-primary btn-lg" style="flex:2" onclick="submitReport()">Гомдол илгээж, Блокчейнд нууцлан хадгалах 🔒</button>
+        </div>
+      </div>
+      <div id="rp5-success" style="display:none;text-align:center;padding:20px 0;">
+        <div class="success-icon">✓</div>
+        <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:8px;">Гомдлыг илгээж, блокчейнд нууцлан хадгаллаа</div>
+        <div style="font-size:14px;color:var(--g500);margin-bottom:24px;">Таны гомдлыг блокчейнд бүртгэж, хадгалсан ба гурван шатны хяналтын байгууллага нэгэн зэрэг ажиллаж эхэлнэ.</div>
+        <div class="chain-box" style="text-align:left;margin-bottom:20px;">
+          <div class="chain-box-label">⛓ Блокчэйн бүртгэл - Хэш/Шифрүүд</div>
+          <div class="chain-line"><span class="chain-key">REPORT_SUBMITTED</span><span class="chain-sep"> | </span><span class="chain-val">types: PHYSICAL,VERBAL,HUMILIATION</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:51Z</span></div>
+          <div class="chain-line"><span class="chain-key">SAFETY_FLAG_URGENT</span><span class="chain-sep"> | </span><span class="chain-val">notified: SOCIAL_WORKER,OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:52Z</span></div>
+          <div class="chain-line"><span class="chain-key">TRACKS_OPENED</span><span class="chain-sep"> | </span><span class="chain-val">school_deadline: +24hrs</span><span class="chain-sep"> | </span><span class="chain-val">police_deadline: +48hrs</span><span class="chain-sep"> | </span><span class="chain-val">social_deadline: +4hrs</span></div>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="showPage('tracker')">Хэргээ хянах →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 4 — CASE TRACKER
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-tracker">
+  <div class="tracker-header">
+    <div class="tracker-header-inner">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--g500);margin-bottom:6px;">ТАНЫ ГОМДОЛ</div>
+          <div class="case-id-big">BLD-2025-04471</div>
+          <div style="font-size:13px;color:var(--g400);margin-top:4px;">###-р сургууль, Хан-Уул · 2025 оны 3-р сарын 10-нд бүртгэгдсэн</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+          <span class="case-status-badge csb-active">● ГОМДЛЫГ ШАЛГАЖ БАЙНА</span>
+          <button class="btn btn-danger btn-sm" onclick="showPressureModal()">🚨 Намайг дарамтлаад байна!</button>
+        </div>
+      </div>
+    </div>
+    <div class="tracker-header-inner" style="padding-bottom:0;">
+      <div class="tracker-tabs">
+        <div class="tracker-tab active" onclick="switchTrackerTab('timeline')" id="tt-timeline">📅 Гомдлын явц</div>
+        <div class="tracker-tab" onclick="switchTrackerTab('tracks')" id="tt-tracks">🔀 Хяналт шалгалтын явц</div>
+        <div class="tracker-tab" onclick="switchTrackerTab('chain')" id="tt-chain">⛓ Блокчэйн бүртгэл</div>
+        <div class="tracker-tab" onclick="switchTrackerTab('close')" id="tt-close">🔒 Гомдлыг хаах</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tracker-body">
+    <div class="tracker-body-inner">
+
+      <!-- Tab: Timeline -->
+      <div class="tracker-panel active" id="tp-timeline">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">Гомдлыг бүртгэсэн</div><div class="tl-time">Mar 10, 08:14</div></div>
+              <div class="tl-desc">Таныг ДАН системээр баталгаажуулсан ба гомдлыг тань бүртгэлээ. Блокчейнд гомдлын дугаарыг тань хадгалсан: <strong>BLD-2025-04471</strong></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">Гомдлын маягтыг илгээсэн ба хавсаргасан нотлох баримтыг тань блокчейн болгосон</div><div class="tl-time">Mar 10, 09:02</div></div>
+              <div class="tl-desc">Таны гомдлыг 2 нотлох баримтын хамт нууцлан цааш илгээлээ. <span class="badge badge-red">ЯАРАЛТАЙ</span> Аюулгүй биш тул Нийгмийн ажилтан болон ХЭҮК-д нэн даруй мэдэгдлээ.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">Нийгмийн ажилтан томилж, аюулгүйн үнэлгээг эхлүүллээ</div><div class="tl-time">Mar 10, 12:04</div></div>
+              <div class="tl-desc">Таны гомдолд Хан-Уул дүүргийн Нийгмийн хамгааллын газраас мэргэжилтэн томиллоо. 4 цагийн дотор яаралтай хохирогчийн гэр бүлтэй нь холбогдов.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">###-р сургууль гомдлыг хүлээн авлаа</div><div class="tl-time">Mar 10, 14:33</div></div>
+              <div class="tl-desc">Сургуулийн захиргаа гомдлыг хүлээн авснаа баталгаажуулж нийгмийн ажилтнаа томиллоо. Ашиг сонирхлын зөрчил илэрсэн — нэг гэмт этгээд ажилтны хүүхэд байна. Гомдлыг Дүүргийн боловсролын хяналтын байгууллагад шилжүүллээ.</div>
+              <div class="callout co-amber" style="margin-top:10px;"><div class="callout-icon">⚠️</div><p><strong>Ашиг сонирхлын зөрчил илэрсэн тул гомдлыг шилжүүллээ:</strong> Сургуулийн захиргаа сургуулийн ажилтны хүүхэдтэй холбоотой хэргийг мөрдөж болохгүй. Дүүргийн хяналтын байгууллага тухайн гомдлын мөрдөгч болов.</p></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">Цагдаагийн хэлтэс гомдлыг хүлээн авлаа</div><div class="tl-time">Mar 11, 16:22</div></div>
+              <div class="tl-desc">Хан-Уулын цагдаагийн хэлтэс гомдлыг хүлээн авч, <strong>POL-2025-8812 дугаартай</strong> хэрэг бүртгэл нээлээ. Хэргийг <strong>3-р сарын 25</strong> гэхэд шийдвэрлэх, ахиц гаргах.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-stall">!</div></div>
+            <div class="tl-card" style="border-color:#fca5a5;">
+              <div class="tl-header"><div class="tl-title" style="color:var(--red);">⚠️ Цагдаа хэргийн хугацааг хэтрүүллээ  — гомдлыг дээд шатны байгууллагад мэдэгдэв</div><div class="tl-time">Mar 25, 09:02</div></div>
+              <div class="tl-desc">Цагдаагийн хэлтэс 14 хоногийн дотор хэрэгт ахиц гаргах хугацааг хэтрүүллээ. Систем автоматаар <strong>ХЭРГИЙН ХУГАЦАА ХЭТЭРСЭН</strong>-г блокчэйнд бичиж, дээд шатны байгууллага (ХЭҮК, ТББ, Прокурор)-д хэргийг шилжүүллээ. Ийнхүү хэргийн хугацаа хэтрүүлснийг нийтэд мэдээлэх цагдаагийн статистикт бүртгэлээ.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-done">✓</div></div>
+            <div class="tl-card">
+              <div class="tl-header"><div class="tl-title">Дээд шатны байгууллага оролцлоо</div><div class="tl-time">Mar 25, 11:14</div></div>
+              <div class="tl-desc">Дээд шатны байгууллага Хан-Уул дүүргийн цагдаагийн хэлтсийн эсрэг Улсын цагдаагийн хяналтын байгууллагад албан гомдол гаргалаа. Цагдаагийн хэлтэс 72 цагийн дотор хариу өгөх шаардлагатай болсон.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot-col"><div class="tl-dot td-active">→</div></div>
+            <div class="tl-card" style="border-color:var(--blue3);">
+              <div class="tl-header"><div class="tl-title" style="color:var(--blue2);">Цагдаагийн мөрдлөгийн шийдвэр, ахицыг хүлээж байна</div><div class="tl-time">3-р сарын 28 гэхэд</div></div>
+              <div class="tl-desc">Дээд шатны байгууллагын шалгалт, тушаалын хүрээнд цагдаагийн хэлтсийг 3-р сарын 28 гэхэд хэргийг шийдвэрлэх, ахиц гаргахыг шаарджээ. Хохирогч та хэргийг хаах хүртэл хэрэг нээлттэй хэвээр байна.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <button class="btn btn-ghost" onclick="showAddUpdate()">+ Гомдолд шинэ мэдээлэл нэмэх</button>
+        </div>
+      </div>
+
+      <!-- Tab: Tracks -->
+      <div class="tracker-panel" id="tp-tracks">
+        <div class="tracks-grid">
+          <div class="track-card track-school">
+            <div class="track-title">🏫 Сургуулийн үйл ажиллагаа</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Гомдлыг хүлээн авсан (14:33, 1-р өдөр)</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Нийгмийн ажилтныг томилсон</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Ашиг сонирхлын зөрчил илэрч, гомдлыг шилжүүлсэн</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Сургуулийн дотоод мөрдлөгийн тайланг илгээсэн</div>
+            <div class="track-item"><div class="ti-dot ti-pending"></div>Шийтгэлийн шийдвэрийг хүлээж байна</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+              <div style="font-size:11px;font-weight:600;color:#92400e;">Хариу өгөх хугацаа: 24 цагийн хугацаанаас 6ц 19м ✓</div>
+            </div>
+          </div>
+          <div class="track-card track-police">
+            <div class="track-title">🚔 Цагдаагийн үйл ажиллагаа</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Гомдол хүлээн авсан (POL-2025-8812)</div>
+            <div class="track-item"><div class="ti-dot ti-fail"></div><span style="color:var(--red);">14 хоногийн дотор шийдээгүй — хугацаа хэтрүүлсэн</span></div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Дээд шатны байгууллагад гомдлыг автоматаар шилжүүлсэн</div>
+            <div class="track-item"><div class="ti-dot ti-pending"></div>Мөрдлөгийн шийдвэр, үр дүн, ахицыг хүлээж байна (3/28)</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+              <div style="font-size:11px;font-weight:600;color:var(--red);">1 удаа хугацаа хэтэрсэн — нийтэд мэдээлэх статистикт бүртгэсэн</div>
+            </div>
+          </div>
+          <div class="track-card track-social">
+            <div class="track-title">🤝 Нийгэм хамгааллын байгууллагын үйл ажиллагаа</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Аюултай нөхцөл байдал үүссэн тул 4 цагийн дотор холбогдох</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Гэр бүлтэй холбогдсон (3-р сарын 10)</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Аюулгүйн үнэлгээг хийсэн</div>
+            <div class="track-item"><div class="ti-dot ti-done"></div>Заавар, зөвлөмж өгсөн</div>
+            <div class="track-item"><div class="ti-dot ti-pending"></div>Зөвлөх, дэмжих уулзалт (7 хоног бүр хийх, оролцох)</div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.1);">
+              <div style="font-size:11px;font-weight:600;color:var(--teal);">Хугацаа хэтрээгүй ✓</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:4px;">
+          <div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:12px;">Гомдол шийдвэрлэх явцын мэдээлэл</div>
+          <div style="display:grid;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="font-size:16px;">⏳</span><span style="color:var(--g600);">Сургуулийн шийдвэр — <strong>хүлээгдэж байна</strong></span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="font-size:16px;">⏳</span><span style="color:var(--g600);">Цагдаагийн мөрдлөг — <strong>Дээд шатны байгууллага сануулга өгсөн</strong></span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span style="font-size:16px;">✅</span><span style="color:var(--g600);">Нийгэм хамгааллын байгууллагын дэмжлэг — <strong>идэвхтэй</strong></span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Chain Log -->
+      <div class="tracker-panel" id="tp-chain">
+        <div class="callout co-blue" style="margin-bottom:20px;"><div class="callout-icon">⛓</div><p>Гомдол шийдвэрлэх явц дахь бүх үйл явдлыг байнга блокчэйнд бүртгэнэ. Эдгээр бүртгэлийг ямар ч байгууллага, оролцогч өөрчлөх, устгах, үгүйсгэх боломжгүй. Энэ нь таны гомдол мэдүүлсэн, шийдүүлсний өөрчлөгдөшгүй баримт юм.</p></div>
+        <div class="chain-box" style="padding:20px;">
+          <div class="chain-box-label">BLOCKCHAIN AUDIT LOG — BLD-2025-04471</div>
+          <div class="chain-line"><span class="chain-key">CASE_OPENED</span><span class="chain-sep"> | </span><span class="chain-val">case_id: BLD-2025-04471</span><span class="chain-sep"> | </span><span class="chain-val">school_id: SCH_0447</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T08:14:22Z</span></div>
+          <div class="chain-line"><span class="chain-key">EVIDENCE_SEALED</span><span class="chain-sep"> | </span><span class="chain-val">file: incident_video_march8.mp4</span><span class="chain-sep"> | </span><span class="chain-val">hash: 0xa4f3b2c1d8e9</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:00:14Z</span></div>
+          <div class="chain-line"><span class="chain-key">EVIDENCE_SEALED</span><span class="chain-sep"> | </span><span class="chain-val">file: bruise_photo_1.jpg</span><span class="chain-sep"> | </span><span class="chain-val">hash: 0xf7e2a1c4b3d8</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:00:31Z</span></div>
+          <div class="chain-line"><span class="chain-key">REPORT_SUBMITTED</span><span class="chain-sep"> | </span><span class="chain-val">types: PHYSICAL,VERBAL,HUMILIATION</span><span class="chain-sep"> | </span><span class="chain-val">period: 2025-02-18/2025-03-08</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:51Z</span></div>
+          <div class="chain-line"><span class="chain-key">SAFETY_FLAG_URGENT</span><span class="chain-sep"> | </span><span class="chain-val">notified: SOCIAL_WORKER,OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-val">response_window: 4hrs</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:52Z</span></div>
+          <div class="chain-line"><span class="chain-key">TRACKS_OPENED</span><span class="chain-sep"> | </span><span class="chain-val">school_dl: +24h</span><span class="chain-sep"> | </span><span class="chain-val">police_dl: +48h</span><span class="chain-sep"> | </span><span class="chain-val">social_dl: +4h(URGENT)</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T09:02:52Z</span></div>
+          <div class="chain-line"><span class="chain-key">ACTION_LOGGED</span><span class="chain-sep"> | </span><span class="chain-val">actor: SOCIAL_WORKER</span><span class="chain-sep"> | </span><span class="chain-val">action: ASSIGNED+FAMILY_CONTACTED</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T12:04:37Z</span></div>
+          <div class="chain-line"><span class="chain-key">ACTION_LOGGED</span><span class="chain-sep"> | </span><span class="chain-val">actor: SCHOOL_ADMIN</span><span class="chain-sep"> | </span><span class="chain-val">action: ACKNOWLEDGED</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T14:33:01Z</span></div>
+          <div class="chain-line"><span class="chain-key">CONFLICT_REROUTED</span><span class="chain-sep"> | </span><span class="chain-val">reason: STAFF_CHILD_INVOLVED</span><span class="chain-sep"> | </span><span class="chain-val">rerouted_to: DISTRICT_AUTH</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-10T14:35:20Z</span></div>
+          <div class="chain-line"><span class="chain-key">ACTION_LOGGED</span><span class="chain-sep"> | </span><span class="chain-val">actor: POLICE_UNIT_17</span><span class="chain-sep"> | </span><span class="chain-val">action: COMPLAINT_ACCEPTED</span><span class="chain-sep"> | </span><span class="chain-val">ref: POL-2025-8812</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-11T16:22:08Z</span></div>
+          <div class="chain-line" style="color:#fca5a5;"><span class="chain-key" style="color:#f87171;">DEADLINE_MISSED</span><span class="chain-sep"> | </span><span class="chain-val" style="color:#fca5a5;">actor: POLICE_UNIT_17</span><span class="chain-sep"> | </span><span class="chain-val" style="color:#fca5a5;">obligation: 14DAY_UPDATE</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-25T09:02:51Z</span></div>
+          <div class="chain-line" style="color:#fca5a5;"><span class="chain-key" style="color:#f87171;">STALL_DETECTED</span><span class="chain-sep"> | </span><span class="chain-val" style="color:#fca5a5;">escalated_to: OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-val" style="color:#fca5a5;">days_elapsed: 14</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-25T09:02:51Z</span></div>
+          <div class="chain-line"><span class="chain-key">OMBUDSMAN_INTERVENTION</span><span class="chain-sep"> | </span><span class="chain-val">action: FORMAL_COMPLAINT_ISSUED</span><span class="chain-sep"> | </span><span class="chain-val">target: NATIONAL_POLICE_OVERSIGHT</span><span class="chain-sep"> | </span><span class="chain-ts">2025-03-25T11:14:09Z</span></div>
+        </div>
+      </div>
+
+      <!-- Tab: Close Case -->
+      <div class="tracker-panel" id="tp-close">
+        <div class="callout co-amber" style="margin-bottom:24px;"><div class="callout-icon">⚠️</div><p><strong>Зөвхөн та хэргээ хаах боломжтой шүү.</strong> Сургууль, цагдаагийн ажилтан, нийгмийн ажилтан, засгийн газрын ямар ч алба нэгж хэргийг хааж чадахгүй. Та шийдвэрээ 72 цагийн дотор буцаах боломжтой.</p></div>
+        <div class="card" style="margin-bottom:16px;">
+          <div style="font-size:15px;font-weight:700;color:var(--navy2);margin-bottom:12px;">Одоогоор гомдол шийдвэрлэх явц</div>
+          <div style="display:grid;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span>⏳</span><span>Сургуулийн шийдвэр — <strong>хүлээгдэж байна</strong></span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span>⚖️</span><span>Цагдаагийн мөрдлөг — <strong>Дээд шатны байгууллага сануулга өгсөн</strong></span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span>✅</span><span>Нийгэм хамгааллын байгууллагын дэмжлэг — <strong>идэвхтэй</strong></span></div>
+          </div>
+          <div class="callout co-blue" style="margin-top:12px;"><div class="callout-icon">💡</div><p>Гомдлыг бүрэн шийдвэрлэж дуусаагүй ч та гомдлоо хааж болно — мөн та <strong>шийдвэр, мөрдлөгийн үр дүнг  эсэргүүцэж</strong> Дээд шатны байгууллагад гомдоллох боломжтой.</p></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <button class="btn btn-secondary" onclick="alert('Таны гомдлыг сэтгэлд хүрэхүйц шийдвэрлэсэн гэж сонголоо. Та одооноос эхлэн 72 цагийн дотор шийдвэрээ буцаах боломжтой. Хяналтын байгууллагуудад хэрэг хаах болсныг тань мөн мэдээлсэн.')">✅ Гомдлыг маань сэтгэлд хүрэхүйц шийдвэрлэсэн тул гомдлоо хаая</button>
+          <button class="btn btn-secondary" onclick="alert('Таны гомдлыг хаах ч сэтгэлд хүрэхүйц шийдвэр гараагүй гэж заавал тэмдэглэх буюу үүнийг олон нийтэд мэдээлэх статистикт бүртгэх юм. Хяналтын байгууллагуудад мэдээллээ.')">😔 Гомдлыг маань сэтгэлд хүрэхүйц шийдвэрлэсэнгүй. Гэхдээ би гомдлоо хааж байна</button>
+          <button class="btn btn-ghost" onclick="alert('Таны гомдлоо хянуулах хүсэлтийг хяналтын байгууллага хүлээн авлаа. ХЭҮК-оос тантай 48 цагийн дотор холбогдох ба гомдлыг тань хаахгүй хэвээр нь үлдээнэ')">⚖️ Би энэ шийдвэрийг эсэргүүцэж байна - Хяналтын байгууллагад хандах</button>
+        </div>
+        <div class="callout co-red" style="margin-top:20px;"><div class="callout-icon">🔒</div><p>72 цагийн хугацааны дараа таны гаргасан шийдвэрийг эцэслэж, хадгалах болно. Та гомдлынхоо процесс, үе шат бүрийн явц, хэргийн архив (бүх бичилт, блокчейн хэш/шифр)-г татаж авах боломжтой болно.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PAGE 5 — STATISTICS
+══════════════════════════════════════════════════════ -->
+<div class="page" id="page-stats">
+  <!-- National stats hero -->
+  <div class="stats-hero">
+    <div class="stats-hero-inner">
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:#60a5fa;margin-bottom:12px;">// УЛСЫН НИЙТИЙН ХЯНАЛТЫН САМБАР — 7 ХОНОГ БҮР ШИНЭЧИЛДЭГ</div>
+      <div style="font-size:28px;font-weight:800;color:var(--white);margin-bottom:6px;letter-spacing:-0.5px;">Монгол Улсын Дээрэлхэх Гэмт Хэргийн Статистик</div>
+      <div style="font-size:14px;color:var(--g400);margin-bottom:32px;">Хохирогчдын гомдлоос зөвхөн статистик мэдээллийг авсан буюу хувийн мэдээллийг бүрэн нууцалсан. Статистик үр дүнг ил тод мэдээлснээр хяналт, шалгалтын байгууллагуудад хариуцлагатай ажиллах хөшүүрэг бий болно.</div>
+      <div class="national-grid">
+        <div class="nat-card highlight"><div class="nat-icon">📋</div><div class="nat-val">312</div><div class="nat-label">Энэ жил ирүүлсэн гомдол</div><div class="nat-note">↑ Өнгөрсөн жилийнхээс 14%-иар өссөн</div></div>
+        <div class="nat-card"><div class="nat-icon">⏱</div><div class="nat-val">38ц</div><div class="nat-label">Сургуулийн хариу өгөх дундаж хугацаа</div><div class="nat-note">Зорилт: 24 цагийн дотор</div></div>
+        <div class="nat-card"><div class="nat-icon">🚨</div><div class="nat-val">47</div><div class="nat-label">Хугацаа хэтэрсэн хэрэг</div><div class="nat-note">Хяналтын байгууллагын нийт үзүүлэлт, энэ жилийн хувьд</div></div>
+        <div class="nat-card"><div class="nat-icon">⚖️</div><div class="nat-val">9%</div><div class="nat-label">Шүүхэд шилжүүлсэн</div><div class="nat-note">312 хэргийн 28-г нь шилжүүлсэн</div></div>
+        <div class="nat-card"><div class="nat-icon">😔</div><div class="nat-val">31%</div><div class="nat-label">Сэтгэл ханамжгүйгээр хаагдсан гомдол</div><div class="nat-note">Үйл ажиллагааны үр ашгийн түвшин</div></div>
+        <div class="nat-card"><div class="nat-icon">🔁</div><div class="nat-val">26%</div><div class="nat-label">Давтан хохирогчид</div><div class="nat-note">Олон удаа гомдол мэдүүлсэн</div></div>
+        <div class="nat-card"><div class="nat-icon">🚨</div><div class="nat-val">44</div><div class="nat-label">Аюултай нөхцөл байдалтай хохирогч</div><div class="nat-note">Яаралтай: мэдээлэх үед эрсдэлтэй байсан</div></div>
+        <div class="nat-card"><div class="nat-icon">📊</div><div class="nat-val">58%</div><div class="nat-label">Сэтгэл ханамжтайгаар шийдвэрлэсэн гомдол</div><div class="nat-note">Хохирогч "сэтгэл ханамжтай"-гаар хэргээ хаасан</div></div>
+      </div>
+
+      <!-- Incident type chart -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);padding:24px;margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:16px;">Дээрэлхэлтийн төрлөөр (2025)</div>
+        <div class="bar-chart-wrap">
+          <div class="bc-row"><div class="bc-label">Аман хүчирхийлэл</div><div class="bc-bar-track"><div class="bc-fill" style="width:82%;background:#3b82f6;"><span class="bc-fill-label">256</span></div></div><div class="bc-val">256</div></div>
+          <div class="bc-row"><div class="bc-label">Зодож гэмтээх</div><div class="bc-bar-track"><div class="bc-fill" style="width:61%;background:#ef4444;"><span class="bc-fill-label">190</span></div></div><div class="bc-val">190</div></div>
+          <div class="bc-row"><div class="bc-label">Цахим орчинд дээрэлхэх</div><div class="bc-bar-track"><div class="bc-fill" style="width:49%;background:#8b5cf6;"><span class="bc-fill-label">153</span></div></div><div class="bc-val">153</div></div>
+          <div class="bc-row"><div class="bc-label">Сэтгэл санааны хүчирхийлэх</div><div class="bc-bar-track"><div class="bc-fill" style="width:38%;background:#f59e0b;"><span class="bc-fill-label">120</span></div></div><div class="bc-val">120</div></div>
+          <div class="bc-row"><div class="bc-label">Ялгаварлан гадуурхах</div><div class="bc-bar-track"><div class="bc-fill" style="width:29%;background:#14b8a6;"><span class="bc-fill-label">91</span></div></div><div class="bc-val">91</div></div>
+          <div class="bc-row"><div class="bc-label">Бэлгийн дарамт</div><div class="bc-bar-track"><div class="bc-fill" style="width:18%;background:#ec4899;"><span class="bc-fill-label">57</span></div></div><div class="bc-val">57</div></div>
+          <div class="bc-row"><div class="bc-label">Айлган сүрдүүлэх</div><div class="bc-bar-track"><div class="bc-fill" style="width:14%;background:#f97316;"><span class="bc-fill-label">44</span></div></div><div class="bc-val">44</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сургууль rankings -->
+  <div class="wrap-wide">
+    <div class="sec-label" style="margin-top:8px;">// Сургуулийн гүйцэтгэлийн жагсаалт</div>
+    <div class="sec-title">Амжилтаар жагсаасан сургуулиуд</div>
+    <div class="sec-desc">Нийлмэл оноогоор жагсаасан: хариу өгөх хугацаа + хугацаа хэтэрсэн гомдол + хохирогчийн сэтгэл ханамжийн хувь. Сургуулиудын гүйцэтгэлийг нийтэд нээлттэй мэдээлнэ. <span style="color:var(--red);font-weight:600;">Доод зэрэглэл = муу гүйцэтгэл.</span></div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+      <button class="btn btn-sm btn-secondary" onclick="sortTable('cases')">Гомдлын тоогоор эрэмбэлэх ↕</button>
+      <button class="btn btn-sm btn-secondary" onclick="sortTable('response')">Хариу өгөх хугацаагаар эрэмбэлэх ↕</button>
+      <button class="btn btn-sm btn-secondary" onclick="sortTable('score')">Нийт үнэлгээгээр эрэмбэлэх ↕</button>
+    </div>
+
+    <div class="school-table-wrap card" style="padding:0;overflow:hidden;">
+      <table class="school-table" id="school-table">
+        <thead>
+          <tr>
+            <th>Эрэмбэ</th>
+            <th>Сургууль</th>
+            <th>Дүүрэг</th>
+            <th>Гомдлын тоо (2025)</th>
+            <th>Дундаж хариу өгөх хугацаа</th>
+            <th>Хугацаа хэтэрсэн гомдол</th>
+            <th>% Дээд шатанд шилжүүлсэн</th>
+            <th>Сэтгэл ханамжийн түвшин</th>
+            <th style="text-align:center;min-width:72px;">Үнэлгээ</th>
+          </tr>
+        </thead>
+        <tbody id="school-tbody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Police performance -->
+    <div style="margin-top:48px;">
+      <div class="sec-label">// Цагдаагийн хэлтсийн гүйцэтгэл</div>
+      <div class="sec-title">Цагдаагийн үйл ажиллагааны үр дүн</div>
+      <div class="sec-desc">Ажилтнуудыг нэр цохохгүй, хэлтсээр нь дүгнэнэ. Хугацаа хэтрүүлсэн гомдол болон шүүхэд шилжүүлсэн хэргийн хувь нийтэд нээлттэй.</div>
+      <div class="police-table-wrap card" style="padding:0;overflow:hidden;">
+        <table class="police-table">
+          <thead>
+            <tr>
+              <th>Хэлтэс</th>
+              <th>Дүүрэг</th>
+              <th>Гомдлын тоо</th>
+              <th>Дундаж хүлээн авах хугацаа</th>
+              <th>Хугацаа хэтрүүлсэн хэргийн хувь</th>
+              <th>Шүүхэд шилжүүлсэн хэргийн хувь</th>
+              <th>Яллах дүгнэлттэй хэргийн хувь</th>
+              <th>Үнэлгээ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>17-р Хэлтэс</strong></td><td>Хан-Уул</td><td>41</td><td style="color:var(--red);font-weight:600;">67h</td><td><span style="color:var(--red);font-weight:600;">34%</span></td><td>18%</td><td>7%</td><td><span class="perf-pill perf-f">F</span></td></tr>
+            <tr><td><strong>3-р Хэлтэс</strong></td><td>Баянгол</td><td>52</td><td>29h</td><td style="color:var(--amber);font-weight:600;">18%</td><td>31%</td><td>11%</td><td><span class="perf-pill perf-c">C</span></td></tr>
+            <tr><td><strong>9-р Хэлтэс</strong></td><td>Сүхбаатар</td><td>38</td><td>19h</td><td style="color:var(--amber);">14%</td><td>28%</td><td>9%</td><td><span class="perf-pill perf-c">C+</span></td></tr>
+            <tr><td><strong>12-р Хэлтэс</strong></td><td>Чингэлтэй</td><td>47</td><td>22h</td><td>11%</td><td>35%</td><td>14%</td><td><span class="perf-pill perf-b">B</span></td></tr>
+            <tr><td><strong>5-р Хэлтэс</strong></td><td>Баянзүрх</td><td>61</td><td>18h</td><td>8%</td><td>42%</td><td>16%</td><td><span class="perf-pill perf-b">B+</span></td></tr>
+            <tr><td><strong>1-р Хэлтэс</strong></td><td>Сонгинохайрхан</td><td>44</td><td>14h</td><td style="color:var(--green);">4%</td><td>51%</td><td>22%</td><td><span class="perf-pill perf-a">A</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Outcome stats -->
+    <div style="margin-top:48px;">
+      <div class="sec-label">// Хэрэг, гомдол шийдвэрлэлтийн үр дүн</div>
+      <div class="sec-title">Гомдлын эцсийн үр дүн ямар байдаг вэ?</div>
+      <div class="sec-desc">Эдгээр тоо нь бодит үр дүнгийн чанарыг харуулна — зөвхөн "хаагдсан хэрэг" биш.</div>
+      <div class="donut-row">
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">✅</div><div class="donut-val" style="color:var(--green);">58%</div><div class="donut-label">Сэтгэл ханамжтайгаар гомдлоо хаасан</div></div>
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">😔</div><div class="donut-val" style="color:var(--amber);">31%</div><div class="donut-label">Сэтгэл ханамжгүйгээр гомдлоо хаасан</div></div>
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">⚖️</div><div class="donut-val" style="color:var(--purple);">8%</div><div class="donut-label">Маргасан үр дүн</div></div>
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">🔁</div><div class="donut-val" style="color:var(--blue2);">3%</div><div class="donut-label">Сэргээсэн гомдол</div></div>
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">⚖️</div><div class="donut-val" style="color:var(--navy2);">9%</div><div class="donut-label">Шүүхэд шилжүүлсэн</div></div>
+        <div class="donut-card"><div style="font-size:28px;margin-bottom:8px;">👨‍👩‍👧</div><div class="donut-val" style="color:var(--red);">7%</div><div class="donut-label">Асран хамгаалагч нь хаасан</div></div>
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <div style="margin-top:48px;padding:24px;background:var(--g100);border-radius:var(--radius-sm);text-align:center;">
+      <div style="font-size:14px;font-weight:600;color:var(--g700);margin-bottom:6px;">Статистик Даваа гарагт 00:00 цагт шинэчлэгдэнэ</div>
+      <div style="font-size:13px;color:var(--g400);">Ямар ч хувийн мэдээлэл нээлттэй биш ба блокчейнээр нууцлан хадгалсан. Ямар ч хохирогч, гэрч, гэмт этгээдийг энэ өгөгдлөөс таних боломжгүй. Албан байгууллагуудын нэрийг ил тод мэдээлж байгаа нь хариуцлага, ил тод байдлыг сайжруулах юм.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ PAGE 6 — FOR DEVELOPERS ═══ -->
+<div class="page" id="page-dev">
+
+  <!-- Hero -->
+  <div style="background:var(--navy);padding:64px 24px 48px;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 65% 0%,#0d2d5e,transparent);pointer-events:none;"></div>
+    <div style="max-width:880px;margin:0 auto;position:relative;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);border-radius:20px;padding:3px 10px;margin-bottom:16px;">
+        <span style="font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:#4ade80;">● ТЕХНОЛОГИЙН ТАЙЛБАР</span>
+      </div>
+      <h1 style="font-size:clamp(26px,5vw,46px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:14px;"><span>Архитектур ба Технологи</span><br><span style="color:#60a5fa;">BoLiYo систем яаж ажиллах вэ?</span></h1>
+      <p style="font-size:15px;color:var(--g400);max-width:600px;line-height:1.75;margin-bottom:28px;">Хөгжүүлэгч инженерүүд, системийн архитекторууд болон засгийн газрын мэдээллийн технологийн ажилтнуудад энэ хэсгийг зориулав. Энэ хуудас BoLiYo системд ямар технологийг яагаад сонгосон, бүрэлдэхүүнүүд нь яаж холбогддог талаар техникийн боловч ойлгомжтой хэлээр тайлбарлахыг хичээнэ.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <span style="background:rgba(26,86,219,.3);border:1px solid rgba(96,165,250,.4);color:#93c5fd;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Permissioned Блокчэйн</span>
+        <span style="background:rgba(13,148,136,.2);border:1px solid rgba(20,184,166,.35);color:#5eead4;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Blockchain Smart Contracts</span>
+        <span style="background:rgba(124,58,237,.2);border:1px solid rgba(167,139,250,.35);color:#c4b5fd;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Танилт нэвтрэлтийн API</span>
+        <span style="background:rgba(217,119,6,.2);border:1px solid rgba(251,191,36,.35);color:#fcd34d;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Blockchain BFT баталгаажуулалт</span>
+        <span style="background:rgba(220,38,38,.2);border:1px solid rgba(248,113,113,.35);color:#fca5a5;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Zero-Knowledge-Proof баталгаажуулалт</span>
+        <span style="background:rgba(5,150,105,.2);border:1px solid rgba(16,185,129,.35);color:#6ee7b7;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);">Decentralized Storage</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:880px;margin:0 auto;padding:48px 24px 64px;">
+
+    <!-- 01 WHY BLOCKCHAIN -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 01 — ҮНДСЭН АСУУДАЛ</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Яагаад блокчэйн? Яагаад энгийн мэдээллийн сан, датабааз ашиглахгүй вэ?</div>
+      <p style="font-size:14px;color:var(--g600);line-height:1.8;margin-bottom:14px;">BoLiYo системийн шийдэж байгаа үндсэн асуудал нь технологийн биш итгэлцлийн асуудал юм. Монголын одоогийн системд дээрэлхэлтийн тайлан хүн төвтэй процессоор дамждаг: сургуулийн захиргаа, цагдаа, нийгмийн ажилтнууд. Тэдний хэн ч баримт нотолгоо, хэргийг чимээгүй дарж, удаашруулж, эсвэл устгаж чадна — учир нь гомдол, хэрэг мэдүүлсэн, баримт нотолгоог өгсөн гэдгийг бие даан нотлох арга байдаггүй.</p>
+      <p style="font-size:14px;color:var(--g600);line-height:1.8;margin-bottom:20px;">Төрийн байгууллагуудын удирдлага дор байдаг энгийн мэдээллийн сан, датабаазууд итгэлцлийн асуудлыг шийдэхгүй — мэдээллийн санг хянадаг нэг байгууллага эсвэл хүн үүнийг засварлаж чадна. Бидэнд хэрэгтэй зүйл бол ямар нэгэн оролцогч түүх, ул мөрийг өөрчлөх эсвэл устгах эрхгүй мэдээллийн сан юм. Энэ нь яг блокчэйний давуу тал юм: дахин давтагдашгүй, нэг л удаа гарч ирдэг хэш/шифр код бүхий хар данс үүсгэх хэрэгтэй.</p>
+      <div style="background:#0b1929;border:1px solid #1e3a5f;border-radius:10px;padding:20px 22px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:#3b5fa0;margin-bottom:12px;">ДИЗАЙНЫГ ТОВЧХОН ТАЙЛБАРЛАВАЛ</div>
+        <div style="font-family:var(--mono);font-size:13px;line-height:2.2;">
+          <div><span style="color:#f87171;">Асуудал: </span><span style="color:#a5f3fc;">Мэдээллийн санг хянадаг аливаа байгууллага гомдол, баримт нотолгоог өөрчилж, устгаж чадна</span></div>
+          <div><span style="color:#4ade80;">Шийдэл: </span><span style="color:#a5f3fc;">Бүртгэл хөтлөх, өөрчлөх эрхийг blockchain сүлжээний validator node болох олон бие даасан байгууллагуудад тараана</span></div>
+          <div><span style="color:#fbbf24;">Хязгаарлалт: </span><span style="color:#a5f3fc;">Заавал Permissioned Blockchain байна — Public blockchain-үүд нь хэт удаан, үнэтэй, хууль зүйн хувьд эрсдэлтэй юм</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 PUBLIC VS PERMISSIONED -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 02 — Public ба Permissioned БЛОКЧЭЙН</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Яагаад private, permissioned blockchain гэж? — Ethereum эсвэл Bitcoin биш</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+        <div style="background:var(--white);border:1px solid #fca5a555;border-radius:10px;padding:18px;">
+          <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px;">❌ Public Blockchain яагаад тохирохгүй вэ?</div>
+          <ul style="font-size:12px;color:var(--g500);line-height:1.9;padding-left:16px;margin:0;">
+            <li>Хэрэглэгч бүрд gas fee буюу шимтгэл төлнө - өргөн хэмжээний сүлжээ, системийн хувьд тогтвортой биш юм</li>
+            <li>Blockchain Гүйлгээ буюу хэш үүсгэх, баталгаажуулах процесс удаан (секундээс минут хүртэл ихсэж болно)</li>
+            <li>Нэр байхгүй, тодорхойгүй оролцогчдыг Монгол улсын хуулийн орчин нөхцөлийн хувьд ажиллуулах боломжгүй</li>
+            <li>Blockchain-үүдийн үр дүнг өөрчлөх боломжтой - Өөрчлөгдөхгүй гэсэн баталгаа байгаа ч тэр нь 100% байж чадахгүй</li>
+          </ul>
+        </div>
+        <div style="background:var(--white);border:1px solid #4ade8055;border-radius:10px;padding:18px;">
+          <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;">✅ Permissioned Blockchain яагаад тохирох вэ?</div>
+          <ul style="font-size:12px;color:var(--g500);line-height:1.9;padding-left:16px;margin:0;">
+            <li>Blockchain баталгаажуулах validator-ууд нь улсад бүртгэлтэй байгууллагууд байх ба хуулийн нийцлийг хангана</li>
+            <li>Blockchain Гүйлгээ буюу хэш үүсгэх, баталгаажуулах процесс үнэгүй бөгөөд шууд бэлэн болдог (2 секундээс бага хугацаанд)</li>
+            <li>Византийн алдааг илрүүлэх аргачлал буюу BFT алгоритмаар Blockchain бүр бүрэн 100% баталгаатай байж чадна</li>
+            <li>Өгөгдлийг Монгол Улсын нутаг дэвсгэрт хадгалах тул хуулийн нийцлийг бүрэн хангана</li>
+          </ul>
+        </div>
+      </div>
+      <div style="background:#0b1929;border:1px solid #1e3a5f;border-radius:10px;padding:20px 22px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:#3b5fa0;margin-bottom:14px;">САНАЛ БОЛГОСОН ПЛАТФОРМУУД — EVM-НИЙЦТЭЙ ЗӨВШӨӨРӨЛТ ГИНЖНҮҮД</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:4px;">Hyperledger Besu</div>
+            <div style="font-size:11px;color:var(--g400);line-height:1.6;">Enterprise-grade EVM client. Supports QBFT consensus (BFT). Strong government adoption globally. Apache 2.0 open source.</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:4px;">Quorum (GoQuorum)</div>
+            <div style="font-size:11px;color:var(--g400);line-height:1.6;">ConsenSys / JPMorgan origin. EVM-compatible, permissioned, used widely in financial and government deployments.</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:#60a5fa;margin-bottom:4px;">Fabric (non-EVM)</div>
+            <div style="font-size:11px;color:var(--g400);line-height:1.6;">Hyperledger Fabric — channel-based privacy model, strong for multi-org data separation. More complex to develop for.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--g400);line-height:1.7;">Гүн гүнзгий системийн хэллэг, ойлголт байгаа учир анлиар бичиж үлдээлээ.</div>
+      </div>
+    </div>
+
+    <!-- 03 THREE LAYERS -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 03 — ГУРВАН ДАВХАРГЫН АРХИТЕКТУР</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Давхарга бүр өөр өмчлөгч, өөр итгэлцлийн бүтэцтэй</div>
+      <p style="font-size:14px;color:var(--g600);line-height:1.8;margin-bottom:22px;">BoLiYo систем гурван асуудлыг тусад нь авч үзэж, шийддэг: юунд байнгын, нийтэд ил тод байх ёстой нотлох баримт шаардлагатай вэ (блокчэйн), юуг төрийн систем дотор аюулгүй хадгалах вэ (гомдол, хэргийн дэлгэрэнгүй), хувийн мэдээлэл задруулалгүйгээр мэдээллийн урсгалыг яаж хариуцах вэ (хувийн мэдээллийн давхарга).</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="border:1px solid #2563eb44;border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(26,86,219,.12);padding:14px 20px;display:flex;align-items:center;gap:14px;">
+            <div style="font-family:var(--mono);font-size:22px;font-weight:800;color:#60a5fa;line-height:1;flex-shrink:0;">L1</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Блокчэйны Аудитын Давхарга</div>
+              <div style="font-size:11px;color:var(--g400);font-family:var(--mono);margin-top:2px;">Permissioned BFT algorithm · Blockchain Smart Contracts · Өөрчлөгдөшгүй үйл явдлын хэш бүртгэл</div>
+            </div>
+          </div>
+          <div style="padding:16px 20px;background:var(--white);">
+            <p style="font-size:13px;color:var(--g600);line-height:1.75;margin-bottom:12px;">Blockchain ямар ч хувийн мэдээлэллийг хадгалахгүй. Зөвхөн үйл явдал, процесст ямар ахиц гарсан бэ гэдгийг тэдгээрийн цаг, огноог Blockchain хэш буюу шифр болгож хадгална. Гомдол, хэргийг шийдвэрлэхэд ийм нотлох баримт байсан, эсвэл ийм ажиллагаа явуулсан гэдгийг батлах нотариатын баталгаанаас ялгаагүй юм.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">✅ Юу хадгалдаг вэ?</div><div style="color:var(--g500);line-height:1.6;">Гомдол нээснийг, гомдол хүлээн авсан эсэхийг, хугацаа хэтэрснийг, үе шат, алхам ахисныг, нотлох баримтын файлын Blockchain хэш, аюул эрсдлийн дохио, гомдлыг хаасан эсэх — зөвхөн Blockchain хэш болон цаг, огнооны хамт.</div></div>
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">🚫 Юуг хэзээ ч хадгалахгүй вэ?</div><div style="color:var(--g500);line-height:1.6;">Нэр, тайлбар тэмдэглэл, нотлох баримтын файл, сургуулийн мэдээлэл, байршлын өгөгдөл, ер нь ямар ч хувийн мэдээлэл хадгалахгүй — хэзээ ч, ямар ч нөхцөлд.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #0d948844;border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(13,148,136,.12);padding:14px 20px;display:flex;align-items:center;gap:14px;">
+            <div style="font-family:var(--mono);font-size:22px;font-weight:800;color:#5eead4;line-height:1;flex-shrink:0;">L2</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Гомдлын Өгөгдлийн Давхарга</div>
+              <div style="font-size:11px;color:var(--g400);font-family:var(--mono);margin-top:2px;">Шифрлэгдсэн мэдээллийн сан, датабааз · Төвлөрсөн бус файл хадгалалт · Эрх үүргийн зохицуулалттай хандалт</div>
+            </div>
+          </div>
+          <div style="padding:16px 20px;background:var(--white);">
+            <p style="font-size:13px;color:var(--g600);line-height:1.75;margin-bottom:12px;">Гомдлыг бүтэцлэн, нотлох баримтын файл, хяналтын байгууллага бүр юу хийсэн, оруулсныг энд хадгална — Монгол улсын төр засгийн аюулгүй, эрх үүргийн зохицуулалт бүхий системд оршино. L1 буюу блокчэйн давхарга энэ төр засгийн систем дэх өгөгдөл оршин байгаа ба өөрчлөгдөөгүй, солигдоогүйг нотолдог; L2 нь харин бодит мэдээлэл, файлуудыг хадгалдаг.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">Нотлох баримтын файлууд</div><div style="color:var(--g500);line-height:1.6;">IPFS эсвэл үүнтэй төстэй файл хадгалах баазад байршуулна. Файлын blockchain хэш нь баримтын хаяг болох ба файлыг ямар нэг байдлаар өөрчилсөн тохиолдолд нотлох баримтын хэш ч мөн өөрчлөгдөж баригдана.</div></div>
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">Эрх үүргийн зохицуулалттай</div><div style="color:var(--g500);line-height:1.6;">Хохирогч өөрийн гомдол, хэргийн явцыг бүгдийг харна. Сургууль хэргийн төрөл болон ноцтой байдлыг харна — хохирогчийн хувийн мэдээллийг яагаад ч харахгүй. Цагдаа албан ёсны гомдол, хэрэг бүртгэлийг харна — хувийн мэдээлэл, тэмдэглэлийг харахгүй. Статистикийн давхарга зөвхөн нэгтгэсэн мэдээллийг харуулна.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="border:1px solid #7c3aed44;border-radius:10px;overflow:hidden;">
+          <div style="background:rgba(124,58,237,.12);padding:14px 20px;display:flex;align-items:center;gap:14px;">
+            <div style="font-family:var(--mono);font-size:22px;font-weight:800;color:#c4b5fd;line-height:1;flex-shrink:0;">L3</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:var(--white);">Хувийн Мэдээлэл баталгаажуулах ба хүлээн авах Давхарга</div>
+              <div style="font-size:11px;color:var(--g400);font-family:var(--mono);margin-top:2px;">Улсын баталгаажуулалтын API (ДАН систем) · Мэдээлэл дамжуулах API (ХУР систем) · Zero-Knowledge-Proof</div>
+            </div>
+          </div>
+          <div style="padding:16px 20px;background:var(--white);">
+            <p style="font-size:13px;color:var(--g600);line-height:1.75;margin-bottom:12px;">Гомдол бүртгэхийн тулд 2 асуултад хариулна, гэхэдэ хариултаа хадгалахгүй: 'Энэ бодит иргэн мөн үү?' (ДАН) болон 'Энэ хэргийг аль сургууль, цагдаагийн хэлтэст чиглүүлэх вэ?' (ХУР). Чиглүүлэх ажлыг автоматаар хийнэ — хохирогч гараар сургууль эсвэл цагдаагийн хэлтэс сонгох шаардлагагүй, тэдний хувийн мэдээлэл хэрэгт хэзээ ч бичигдэхгүй.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">ДАН — баталгаажуулалт</div><div style="color:var(--g500);line-height:1.6;">Монголын үндэсний ДАН системтэй стандартын дагуу холбогдоно. ДАН богино хугацааны баталгаажуулалтын токен өгнө. BoLiYo зөвхөн 'verified = true' хүлээн авна — иргэний регистр эсвэл нэрийг хэзээ ч бүртгэхгүй, хадгалахгүй.</div></div>
+              <div style="background:#f8fafc;border-radius:6px;padding:12px;font-size:12px;"><div style="font-weight:700;color:var(--navy2);margin-bottom:4px;">ХУР — хувийн мэдээлэл</div><div style="color:var(--g500);line-height:1.6;">Сургуулийн мэдээллийг ХУР-аас дуудна. Зөвхөн school_id болон police_unit_id гэх мэт мэдээллийг л авна — нэр эсвэл хувийн дэлгэрэнгүй мэдээлэл авахгүй. Энэ нь цааш гомдол мэдүүлэхэд ашигладаг цорын ганц өгөгдөл бөгөөд бүртгэхгүй, хадгалахгүй.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 SMART CONTRACTS -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 04 — SMART CONTRACTS</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Дөрвөн Blockchain гэрээ — тус бүр нэг үүрэгтэй</div>
+      <p style="font-size:14px;color:var(--g600);line-height:1.8;margin-bottom:20px;">Smart Contract нь блокчэйн дээр ажилладаг жижиг программ юм. Нэгэнт программыг ажиллуулж, уншуулсны дараа хэн ч тэдгээрийг өөрчлөх боломжгүй — систем эзэмшигч хүртэл чадахгүй. Энэ нь хугацаа хэтрүүлэхгүй байх, хуурамчаар хэрэг бүртгэл, процесс өөрчлөх боломжгүй болгодог.</p>
+      <div style="background:var(--white);border:1px solid var(--g200);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <code style="background:#eff6ff;color:#1d4ed8;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">CaseRegistry</code>
+          <div style="font-size:13px;color:var(--g600);line-height:1.7;">Гаргасан гомдол бүрд шинэ Blockchain дэх бичилт үүсгэдэг. Давтагдашгүй хэргийн дугаар оноодог, гомдол нээсэн цаг, огнооны тэмдгийг бүртгэдэг, хувийн мэдээллийг Blockchain хэшийг (school_id) хадгалдаг. Хувийн өгөгдлийг хэзээ ч байгаагаар нь хадгалахгүй, хүрэхгүй.</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <code style="background:#f0fdf4;color:#15803d;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">DeadlineEnforcer</code>
+          <div style="font-size:13px;color:var(--g600);line-height:1.7;">Гомдлын үе шат бүр дэх оролцогчдод тавьсан эцсийн хугацааны хяналтыг хэрэгжүүлдэг. Back-End хэсэг энэ гэрээг хуваарийн дагуу шалгадаг — хариу бүртгэгдэлгүйгээр хугацаа дуусахад автоматаар DEADLINE_MISSED төлөв бичиж, дараагийн байгууллагад дамжуулдаг. Систем автоматаар шийдвэр гаргана.</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <code style="background:#faf5ff;color:#7c3aed;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">EvidenceAnchor</code>
+          <div style="font-size:13px;color:var(--g600);line-height:1.7;">Файлын хэшийг (хадгалалтын давхаргын CID) хүлээн авч Blockchain дээр цаг, огнооны тамга тавьдаг. Энэ нь тодорхой файл тодорхой мөчид оршиж байсан гэдгийг файл биетээр нь хадгалалгүйгээр нотолдог. 2GB хэмжээтэй бичлэгийг нэг 32 byte хэмжээтэй Blockchain хэш болгож болно.</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <code style="background:#fff7ed;color:#c2410c;padding:4px 10px;border-radius:5px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;">StatsAggregator</code>
+          <div style="font-size:13px;color:var(--g600);line-height:1.7;">Зөвхөн файлыг харах эрх бүхий нэгтгэгч. Нийтийн статистикийн самбарт мэдээлэл дамжуулахын тулд процессын үе шат, алхам бүр дэх үйл явдлыг тооцдог — хариу өгөх хугацаа, хугацаа хэтэрсэн дүн, үе шат ахисан тоо. Нэгтгэсэн үзүүлэлтүүд нийтэд нээлттэй; хувийн мэдээлэл хэзээ ч нээлттэй болохгүй.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 VALIDATORS -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 05 — BLOCKCHAIN УДИРДЛАГА</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Хэн блокчэйны сүлжээг ажиллуулах вэ? — яагаад энэ чухал вэ?</div>
+      <p style="font-size:14px;color:var(--g600);line-height:1.8;margin-bottom:20px;">BFT permissioned blockchain-д ямар нэгэн блок бичигдэхийн өмнө баталгаажуулагчдын дийлэнх олонхи зөвшилцөх ёстой. Аюулгүй байдлын загвар сүлжээний баталгаажуулагч/validator-уудаас хамаарна. Хэрэв бүх validator node цагдаа ч юмуу яамны харьяанд байвал хэргийг нуух боломжтой. Тиймээс validator бүрэлдэхүүн нь олон бие даасан байгууллагуудыг — засгийн газрын бус дор хаяж нэг байгууллагыг багтаасан байх ёстой.</p>
+      <div style="background:#0b1929;border:1px solid #1e3a5f;border-radius:10px;padding:22px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:2px;color:#3b5fa0;margin-bottom:14px;">САНАЛ БОЛГОСОН VALIDATOR БҮРЭЛДЭХҮҮН — 4 VALIDATOR (4-ЭЭС 3 БАЙХАД БОЛНО)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:16px;">
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:10px;color:#60a5fa;letter-spacing:1px;margin-bottom:4px;">Баталгаажуулагч 1</div>
+            <div style="font-size:13px;font-weight:700;color:var(--g200);">Боловсролын Яам</div>
+            <div style="font-size:11px;color:var(--g500);margin-top:4px;">Сургуулийн талын өгөгдлийг эзэмшдэг</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:10px;color:#60a5fa;letter-spacing:1px;margin-bottom:4px;">Баталгаажуулагч 2</div>
+            <div style="font-size:13px;font-weight:700;color:var(--g200);">Цагдаагийн Ерөнхий Газар</div>
+            <div style="font-size:11px;color:var(--g500);margin-top:4px;">Цагдаагийн хэлтсийн өгөгдлийг эзэмшдэг</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:10px;color:#60a5fa;letter-spacing:1px;margin-bottom:4px;">Баталгаажуулагч 3</div>
+            <div style="font-size:13px;font-weight:700;color:var(--g200);">Дээд шатны байгууллага</div>
+            <div style="font-size:11px;color:var(--g500);margin-top:4px;">Бие даасан хяналтын байгууллага</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid #1e3a5f;border-radius:8px;padding:14px;">
+            <div style="font-family:var(--mono);font-size:10px;color:#60a5fa;letter-spacing:1px;margin-bottom:4px;">Баталгаажуулагч 4</div>
+            <div style="font-size:13px;font-weight:700;color:var(--g200);">ХЭҮК, Дата баазтай компани гэх мэт</div>
+            <div style="font-size:11px;color:var(--g500);margin-top:4px;">Засгийн газрын бус хяналт</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--g400);line-height:1.75;">4-ээс 3 нь бодит бичлэгтэй бол: хоёр байгууллага бичлэг, хэргийг хуурамчаар үйлдэж, болоогүй гэж хэлэхээр хамтарсан ч нөгөө хоёр нь болсон байна, нотолгоо байна гээд татгалзана. ХЭҮК гэх мэт баталгаажуулагч нь чухал бие даасан баталгаа юм — засгийн газрын гурван яам бүгд хуйвалдсан ч blockchain-г бүрэн хянах боломжгүйг баталгаажуулдаг.</div>
+      </div>
+    </div>
+
+    <!-- 06 PRIVACY -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 06 — НУУЦЛАЛЫН АРХИТЕКТУР</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Хувийн мэдээллийг задруулалгүйгээр нотлох</div>
+      <div style="background:#0b1929;border:1px solid #1e3a5f;border-radius:10px;padding:22px;margin-bottom:16px;font-family:var(--mono);font-size:12px;line-height:2.3;">
+        <div style="font-size:10px;letter-spacing:2px;color:#3b5fa0;margin-bottom:12px;">ТУХАЙН СИСТЕМ ЮУГ ХАРДАГ ВЭ — ЮУГ ХЭЗЭЭ Ч ХАРДАГГҮЙ ВЭ</div>
+        <div><span style="color:#fbbf24;">Иргэний хөтөч  </span><span style="color:#475569;">──DAN OAuth2──▶ </span><span style="color:#60a5fa;">ДАН буцаадаг: </span><span style="color:#a5f3fc;">verified=true, token=eyJ... (BoLiYo-д нэр эсвэл дугаар илгээгддэггүй)</span></div>
+        <div><span style="color:#fbbf24;">BoLiYo Back-End   </span><span style="color:#475569;">──with consent──▶ </span><span style="color:#60a5fa;">ХУР буцаадаг: </span><span style="color:#a5f3fc;">school_id=SCH_0447, police_unit=17 (нэр, элсэлтийн дэлгэрэнгүй байхгүй)</span></div>
+        <div><span style="color:#fbbf24;">Гомдлын бүртгэл      </span><span style="color:#475569;">stores:          </span><span style="color:#a5f3fc;">case_id, hash(school_id), unit_id — хохирогчийн хувийн мэдээлэл хэзээ ч бичигддэггүй</span></div>
+        <div><span style="color:#fbbf24;">Блокчэйн       </span><span style="color:#475569;">stores:          </span><span style="color:#a5f3fc;">hash(case_id + timestamp) — өөр юу ч биш</span></div>
+        <div><span style="color:#fbbf24;">Сургуулийн портал    </span><span style="color:#475569;">sees:            </span><span style="color:#a5f3fc;">incident_type=PHYSICAL, severity=HIGH — хувийн мэдээлэл огт байхгүй</span></div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--g200);border-radius:10px;padding:20px;">
+        <div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Zero-Knowledge-Proof — энд юуг шийдэх вэ?</div>
+        <p style="font-size:13px;color:var(--g600);line-height:1.7;margin-bottom:14px;">Zero-Knowledge-Proof нь нэг оролцогч тал нөгөөдөө талдаа өгөгдлийг тэр чигт нь дамжуулахгүй буюу задруулалгүйгээр зөвхөн шаардлагатай хэсгийг өгөх, батлах буюу нотлох боломжийг олгодог криптографийн арга юм. Жишээлбэл: 'энэ хүн ###-р сургуульд сурдаг' гэдгийг хүний нэрийг хамт явуулахгүйгээр, задруулалгүйгээр нотлох. Энэ нь баталгаажуулалтын алхамын хамгийн хүчтэй нууцлалын баталгаа юм.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="border-left:3px solid #7c3aed;padding-left:14px;"><div style="font-size:13px;font-weight:600;color:var(--navy2);margin-bottom:3px;">1. Сургуульд суралцдаг тухай нотлох баримт</div><div style="font-size:12px;color:var(--g500);line-height:1.7;">ХУР 'энэ ДАН токен SCH_0447 дугаартай сургуульд сурдаг хүнд зориулсан' гэсэн ZKP  үүсгэдэг. BoLiYo нотлох баримт хэн гэдэг хүнтэй хамаарахыг мэдэлгүйгээр хүчинтэй эсэхийг шалгадаг.</div></div>
+          <div style="border-left:3px solid #7c3aed;padding-left:14px;"><div style="font-size:13px;font-weight:600;color:var(--navy2);margin-bottom:3px;">2. Хувийн мэдээлэлгүйгээр давхардал илрүүлэх</div><div style="font-size:12px;color:var(--g500);line-height:1.7;">ДАН токеноос гаргасан nullifier хэш нь системд ижил иргэн аль хэдийн гомдол оруулсан, хэрэг нь нээлттэй эсэхийг шалгах боломжийг олгодог — тэдний хэн болохыг хадгалалгүй эсвэл ямар ч өгөгдлийг тэдний хувийн мэдээлэлтэй холбохгүйгээр ажиллана.</div></div>
+        </div>
+        <div style="margin-top:14px;background:#faf5ff;border-radius:6px;padding:12px;font-size:12px;color:#6d28d9;line-height:1.7;">Жич: заавал энэ ZKP гэдэг blockchain технологийг ашиглах шаардлагагүй. Зөвхөн ДАН, ХУР-н үндсэн сервисээр эхлүүлж болно.</div>
+      </div>
+    </div>
+
+    <!-- 07 STACK -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 07 — САНАЛ БОЛГОХ TECH STACK</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:14px;">Ашиглах боломжит технологиуд — юуг ашиглах вэ? яагаад?</div>
+      <div style="border-radius:10px;overflow:hidden;border:1px solid var(--g200);">
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;background:var(--navy2);color:var(--white);padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.5px;gap:8px;">
+          <div>Бүрэлдэхүүн</div>
+          <div>Санал болгосон Технологи</div>
+          <div>Шалтгаан</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:var(--white);border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#1d4ed8;">Блокчэйн</div>
+          <div style="color:var(--g700);">Hyperledger Besu or GoQuorum — EVM-compatible, permissioned, BFT consensus, Solidity smart contracts</div>
+          <div style="font-size:11px;color:var(--g400);">Immediate finality, free transactions, legally accountable validators</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:#f8fafc;border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#0d9488;">Файлын хадгалалт</div>
+          <div style="color:var(--g700);">IPFS or equivalent content-addressed storage — files stored off-chain, only the hash anchored on-chain</div>
+          <div style="font-size:11px;color:var(--g400);">Impossible to swap a file without detection</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:var(--white);border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#7c3aed;">Гомдлын мэдээллийн сан</div>
+          <div style="color:var(--g700);">PostgreSQL with row-level security and field-level AES-256 encryption for all PII</div>
+          <div style="font-size:11px;color:var(--g400);">Mature, auditable, fine-grained role access</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:#f8fafc;border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#b45309;">Back-End API</div>
+          <div style="color:var(--g700);">
+Go (Golang) — REST API server, blockchain event listener, enforcement microservice</div>
+          <div style="font-size:11px;color:var(--g400);">High concurrency, low overhead, suited to long-running services</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:var(--white);border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#dc2626;">Хувийн мэдээлэл</div>
+          <div style="color:var(--g700);">
+OAuth 2.0 / OpenID Connect against Mongolia's DAN system — no new accounts required</div>
+          <div style="font-size:11px;color:var(--g400);">Reuses existing citizen infrastructure</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:#f8fafc;border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#0d9488;">Нууцлал (v2)</div>
+          <div style="color:var(--g700);">ZK-proof circuits (e.g. circom + snarkjs) for enrollment proof and nullifier-based duplicate detection</div>
+          <div style="font-size:11px;color:var(--g400);">Maximum privacy guarantee; v1 uses blind tokens as interim</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:var(--white);border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;">
+          <div style="font-weight:600;color:#b45309;">Front-End</div>
+          <div style="color:var(--g700);">
+React PWA or progressive HTML — Mongolian-first, offline-capable, low-bandwidth mobile</div>
+          <div style="font-size:11px;color:var(--g400);">Must work on a 3G phone in a school corridor</div>
+        </div>
+        <div style="display:grid;grid-template-columns:140px 1fr 155px;gap:8px;background:#f8fafc;border-top:1px solid var(--g100);padding:12px 16px;font-size:13px;align-items:start;border-radius:0 0 10px 10px;">
+          <div style="font-weight:600;color:#dc2626;">Дэд бүтэц</div>
+          <div style="color:var(--g700);">
+4-node validator cluster (one per org) + app servers on Mongolian state cloud — all case data stays on Mongolian soil
+</div>
+          <div style="font-size:11px;color:var(--g400);">Legal requirement: data sovereignty
+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 PHASES -->
+    <div style="margin-bottom:52px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--blue3);margin-bottom:8px;">// 08 — СИСТЕМИЙГ ҮЕ ШАТТАЙГААР ХЭРЭГЖҮҮЛЦГЭЭЕ!</div>
+      <div style="font-size:22px;font-weight:700;color:var(--navy2);margin-bottom:18px;">Хэрхэн бүтээж, гаргах вэ?</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+        <div style="border:1px solid var(--g200);border-radius:10px;padding:20px;background:var(--white);">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--g400);letter-spacing:2px;margin-bottom:6px;">ҮЕ ШАТ 1</div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Туршилт — 3 сургууль, 1 дүүрэг</div>
+          <div style="font-size:12px;color:var(--g500);line-height:1.75;">Туршилтын сүлжээ. Бодит ДАН/ХУР интеграц. Сургуулийн захиргааны портал. Гараар хугацаа хянана. Нийтийн статистикгүй. Зорилго: ажлын урсгал болон байгууллагын хамтын ажиллагааг баталгаажуулах.</div>
+        </div>
+        <div style="border:1px solid #2563eb55;border-radius:10px;padding:20px;background:#eff6ff;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--blue3);letter-spacing:2px;margin-bottom:6px;">ШАТ 2</div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Дүүрэг — Хан-Уулын бүх сургуулиуд</div>
+          <div style="font-size:12px;color:var(--g500);line-height:1.75;">Үндсэн сүлжээний гаргалт. Автомат систем, хяналт ажиллаж байна. Нийтийн статистикийн самбар. Цагдааны порталыг оруулж өгнө. Дээд шатны байгууллага хянах хандалттай болно.</div>
+        </div>
+        <div style="border:1px solid #15803d55;border-radius:10px;padding:20px;background:#f0fdf4;">
+          <div style="font-family:var(--mono);font-size:9px;color:#15803d;letter-spacing:2px;margin-bottom:6px;">ШАТ 3</div>
+          <div style="font-size:14px;font-weight:700;color:var(--navy2);margin-bottom:10px;">Үндэсний систем болгох - Монгол Даяар</div>
+          <div style="font-size:12px;color:var(--g500);line-height:1.75;">Бүрэн үндэсний статистик, бүртгэлийн сантай болно. Бүх 4 validator идэвхтэй. ZKP ашиглана. Гар утасны апп гаргана. Боловсролын яаманд албан ёсоор гардуулан шилжүүлнэ. Код, архитектурыг open-source болгоно.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:var(--navy2);border-radius:14px;padding:36px;text-align:center;">
+      <div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:8px;">Үүнийг бүтээх эсвэл санал бодлоо шингээмээр байна уу?</div>
+      <div style="font-size:13px;color:var(--g400);max-width:500px;margin:0 auto 24px;line-height:1.75;">Энэ бол ердөө санаа буюу өнгөн дизайн бүхий юм. Бүрэн код, архитектур одоохондоо байхгүй байна. Хэрэв та энэ системийг сонирхож байгаа хөгжүүлэгч, засгийн газрын IT инженер, эсвэл хуульч бол бүтэн дизайныг судалж, олон нийтэд нээлттэйгээр санал бодлоо илэрхийлээрэй.</div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showPage('how')">← Системийн Тойм</button>
+        <button class="btn btn-ghost" onclick="showPage('stats')">📊 Статистикийн Дизайн</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- END PAGE 6: FOR DEVELOPERS -->
+
+<!-- Pressure Modal -->
+<div id="pressure-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;">
+  <div style="background:var(--white);border-radius:var(--radius-lg);padding:32px;max-width:440px;width:100%;">
+    <div style="font-size:22px;font-weight:700;color:var(--red);margin-bottom:8px;">🚨 Дарамтын дохио</div>
+    <div style="font-size:14px;color:var(--g600);margin-bottom:20px;">Энэ товчийг дарснаар та хэргийг хаах эсвэл өөрчлүүлэхийн тулд хэн нэгэн дарамт үзүүлж байгааг мэдэгдэж байгаа юм. Дээд шатны байгууллагад нэн даруй явуулагдана.</div>
+    <div class="chain-box" style="margin-bottom:20px;">
+      <div class="chain-box-label">⛓ Бичигдэх</div>
+      <div class="chain-line"><span class="chain-key">VICTIM_PRESSURE_FLAG</span><span class="chain-sep"> | </span><span class="chain-val">case_id: BLD-2025-04471</span><span class="chain-sep"> | </span><span class="chain-val">notified: OMBUDSMAN</span><span class="chain-sep"> | </span><span class="chain-ts">now</span></div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <button class="btn btn-secondary" style="flex:1" onclick="closePressureModal()">Цуцлах</button>
+      <button class="btn btn-danger" style="flex:2" onclick="confirmPressure()">Тийм, надад дарамт үзүүлж байна</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── NAVIGATION ──────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── LOGIN FLOW ───────────────────────────────────────────────
+function loginStep1() {
+  const id = document.getElementById('dan-input').value;
+  const pin = document.getElementById('dan-pin').value;
+  if (id.length < 6) { alert('Please enter your DAN ID.'); return; }
+  if (pin.length < 4) { alert('Please enter your PIN.'); return; }
+  setLoginStep(2);
+  let texts = ['ДАН-тай холбогдож байна...', 'Хувийн мэдээллийг шалгаж байна...', 'ХУР-аар элсэлтийг шалгаж байна...', 'Аюулгүй сессийг бүрдүүлж байна...'];
+  let i = 0;
+  const iv = setInterval(() => {
+    document.getElementById('loading-text').textContent = texts[i % texts.length];
+    i++;
+    if (i > 3) { clearInterval(iv); setTimeout(() => setLoginStep(3), 500); }
+  }, 700);
+}
+function loginStep3() { setLoginStep(4); }
+function loginStep3wrong() {
+  alert('Please contact HUR support to update your enrollment records, or use the manual school entry option.');
+}
+function setLoginStep(n) {
+  document.querySelectorAll('.login-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ls-' + n).classList.add('active');
+  for (let i = 1; i <= 4; i++) {
+    const d = document.getElementById('lp' + i);
+    d.className = 'lp-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+}
+function goToReport() { showPage('report'); }
+
+// ── REPORT FLOW ──────────────────────────────────────────────
+function goReportStep(n) {
+  document.querySelectorAll('.report-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rs-step').forEach(s => s.classList.remove('active', 'done'));
+  document.getElementById('rp-' + n).classList.add('active');
+  for (let i = 1; i <= 5; i++) {
+    const s = document.getElementById('rss-' + i);
+    if (i < n) s.classList.add('done');
+    else if (i === n) s.classList.add('active');
+  }
+  window.scrollTo(0, document.querySelector('.report-stepper').getBoundingClientRect().top + window.scrollY - 80);
+}
+function toggleCheck(el) {
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+}
+function toggleOutcome(el) { el.classList.toggle('selected'); }
+let safety = 'no';
+function setSafety(v) {
+  safety = v;
+  ['yes','no','unsure'].forEach(s => {
+    document.getElementById('sf-' + s).className = 'safety-btn';
+  });
+  document.getElementById('sf-' + v).className = 'safety-btn sel-' + v;
+  document.getElementById('safety-warn').style.display = v === 'no' ? 'flex' : 'none';
+}
+function simulateUpload() {
+  const ev = document.getElementById('ev-items');
+  const item = document.createElement('div');
+  item.className = 'evidence-item';
+  item.innerHTML = `<span class="ei-icon">📄</span><div style="flex:1"><div class="ei-name">screenshot_messages.png</div><div class="ei-hash">hash: 0xd2c3e4f5a1b2...</div></div><span class="ei-badge">SEALED ✓</span>`;
+  ev.appendChild(item);
+  document.getElementById('ev-drop').innerHTML = `<div class="ed-icon">✅</div><div class="ed-text">Файл байршуулж, битүүмжлэгдсэн</div><div class="ed-sub">Нэмэлт файл нэмэх</div>`;
+}
+function showAddUpdate() { alert('You can add a new description, upload additional evidence, or flag a new incident. This will create a new entry on the blockchain timeline.'); }
+function submitReport() {
+  document.getElementById('rp5-review').style.display = 'none';
+  document.getElementById('rp5-success').style.display = 'block';
+  goReportStep(5);
+}
+
+// ── TRACKER ─────────────────────────────────────────────────
+function switchTrackerTab(name) {
+  document.querySelectorAll('.tracker-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tracker-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tp-' + name).classList.add('active');
+  document.getElementById('tt-' + name).classList.add('active');
+}
+function showPressureModal() {
+  document.getElementById('pressure-modal').style.display = 'flex';
+}
+function closePressureModal() {
+  document.getElementById('pressure-modal').style.display = 'none';
+}
+function confirmPressure() {
+  closePressureModal();
+  alert('🚨 Pressure flag sent. The Ombudsman has been notified and will contact you within 4 hours. This flag has been permanently recorded on the blockchain.');
+}
+
+// ── SCHOOL TABLE DATA ────────────────────────────────────────
+const schools = [
+  { rank:1, name:'Сургууль #47', district:'Хан-Уул', cases:29, response:'38h', missed:5, escalated:'41%', satisfaction:'44%', score:28, grade:'F' },
+  { rank:2, name:'Сургууль #12', district:'Баянгол', cases:34, response:'52h', missed:8, escalated:'38%', satisfaction:'41%', score:24, grade:'F' },
+  { rank:3, name:'Сургууль #83', district:'Чингэлтэй', cases:18, response:'44h', missed:3, escalated:'33%', satisfaction:'52%', score:35, grade:'D' },
+  { rank:4, name:'Сургууль #61', district:'Хан-Уул', cases:22, response:'31h', missed:4, escalated:'27%', satisfaction:'56%', score:44, grade:'D+' },
+  { rank:5, name:'Сургууль #29', district:'Bayanzurkh', cases:41, response:'27h', missed:2, escalated:'22%', satisfaction:'61%', score:57, grade:'C' },
+  { rank:6, name:'Сургууль #7', district:'Songinokhairkhan', cases:27, response:'24h', missed:1, escalated:'18%', satisfaction:'67%', score:64, grade:'C+' },
+  { rank:7, name:'Сургууль #55', district:'Сүхбаатар', cases:19, response:'21h', missed:1, escalated:'15%', satisfaction:'71%', score:72, grade:'B' },
+  { rank:8, name:'Сургууль #14', district:'Баянгол', cases:33, response:'19h', missed:0, escalated:'12%', satisfaction:'76%', score:78, grade:'B+' },
+  { rank:9, name:'Сургууль #2', district:'Чингэлтэй', cases:15, response:'16h', missed:0, escalated:'8%', satisfaction:'83%', score:88, grade:'A-' },
+  { rank:10, name:'Сургууль #38', district:'Сүхбаатар', cases:12, response:'11h', missed:0, escalated:'5%', satisfaction:'91%', score:94, grade:'A' },
+];
+
+function gradeClass(g) {
+  if (g.startsWith('A')) return 'perf-a';
+  if (g.startsWith('B')) return 'perf-b';
+  if (g.startsWith('C')) return 'perf-c';
+  if (g.startsWith('D')) return 'perf-d';
+  return 'perf-f';
+}
+
+function renderСургуульTable(data) {
+  const tbody = document.getElementById('school-tbody');
+  tbody.innerHTML = '';
+  data.forEach((s, i) => {
+    const pos = i + 1;
+    const rankClass = pos <= 3 ? `rank-${pos}` : '';
+    const respNum = parseInt(s.response);
+    const respColor = respNum > 40 ? 'color:var(--red);font-weight:700;' : respNum > 24 ? 'color:var(--amber);font-weight:600;' : 'color:var(--green);font-weight:600;';
+    const escNum = parseInt(s.escalated);
+    const escColor = escNum > 30 ? 'color:var(--red);font-weight:700;' : escNum > 20 ? 'color:var(--amber);' : 'color:var(--green);';
+    const satNum = parseInt(s.satisfaction);
+    const satColor = satNum < 50 ? 'color:var(--red);font-weight:700;' : satNum < 65 ? 'color:var(--amber);' : 'color:var(--green);font-weight:600;';
+    const barW = Math.round(s.score * 0.9);
+    const barColor = s.score < 40 ? 'var(--red)' : s.score < 65 ? 'var(--amber)' : 'var(--green)';
+    tbody.innerHTML += `
+      <tr>
+        <td><span class="rank-num ${rankClass}">${pos}</span></td>
+        <td><div class="school-name">${s.name}</div></td>
+        <td><div class="school-district">${s.district}</div></td>
+        <td><strong>${s.cases}</strong></td>
+        <td style="${respColor}">${s.response}</td>
+        <td>${s.missed > 0 ? `<span style="color:var(--red);font-weight:700;">${s.missed}</span>` : `<span style="color:var(--green);">0</span>`}</td>
+        <td style="${escColor}">${s.escalated}</td>
+        <td style="${satColor}">${s.satisfaction}</td>
+        <td style="white-space:nowrap;text-align:center;">
+          <div style="display:inline-flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-family:var(--mono);font-size:20px;font-weight:700;color:${barColor};line-height:1;">${s.score}</span>
+            <span class="perf-pill ${gradeClass(s.grade)}">${s.grade}</span>
+          </div>
+        </td>
+      </tr>`;
+  });
+}
+
+let sortAsc = {};
+function sortTable(key) {
+  sortAsc[key] = !sortAsc[key];
+  const sorted = [...schools].sort((a, b) => {
+    let va, vb;
+    if (key === 'cases') { va = a.cases; vb = b.cases; }
+    else if (key === 'response') { va = parseInt(a.response); vb = parseInt(b.response); }
+    else { va = a.score; vb = b.score; }
+    return sortAsc[key] ? va - vb : vb - va;
+  });
+  renderСургуульTable(sorted);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+renderСургуульTable(schools);
+</script>
+
+</body>
+</html>
